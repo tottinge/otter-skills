@@ -6,3 +6,6 @@ __pycache__/
 *.swp
 .venv/
 venv/
+
+# Local authoring source snapshots; not part of the portable skill collection.
+vendor-sources/

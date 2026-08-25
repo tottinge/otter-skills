@@ -4,15 +4,16 @@ Portable agent skills for software craft, drawn primarily from Tim Ottinger’s 
 
 These skills are meant to install cleanly for **Claude**, **Codex**, **Copilot**, and **Warp** (and other tools that discover `SKILL.md` trees).
 
-## Skills (planned set)
+## Skills
 
 | Skill | Purpose |
 |-------|---------|
-| `iterative-story-split` | Primary story splitter via **progressive admission** (start closed → admit one case → default reject) |
+| `story-splitting-for-delivery` | Primary story splitter via **progressive admission** (start closed → admit one case → default reject) |
 | `user-pov-sliced-stories` | Format slices as **User invokes** / **User uses result** (formatter; defers split choice) |
-| `unit_testing` | Microtests + TDD hygiene (FIRST, Canon TDD, ZOMBIES, Tidy First?, virtue-targeted refactor) |
-| `ottinger-code-review` | Review through the **Eight Code Virtues**, including ZOM representation drift |
+| `unit-testing` | Microtests + TDD hygiene (FIRST, Canon TDD, ZOMBIES, Tidy First?, virtue-targeted refactor) |
+| `representation-refactor-review` | Review through the **Eight Code Virtues**, including ZOM representation drift |
 | `code-object-naming` | Naming guidance distilled from the short guide to naming manuscript |
+| `legacy-code-safety` | Characterize poorly understood behavior, create minimal seams, and change risky existing code safely |
 
 Skill bodies live under `skills/<name>/` with a required `SKILL.md`.
 
@@ -33,10 +34,10 @@ Copy or symlink a skill folder into any of:
 Example:
 
 ```bash
-ln -s "$PWD/skills/iterative-story-split" ~/.agents/skills/iterative-story-split
-ln -s "$PWD/skills/iterative-story-split" ~/.claude/skills/iterative-story-split
-ln -s "$PWD/skills/iterative-story-split" ~/.codex/skills/iterative-story-split
-ln -s "$PWD/skills/iterative-story-split" ~/.copilot/skills/iterative-story-split
+ln -s "$PWD/skills/story-splitting-for-delivery" ~/.agents/skills/story-splitting-for-delivery
+ln -s "$PWD/skills/story-splitting-for-delivery" ~/.claude/skills/story-splitting-for-delivery
+ln -s "$PWD/skills/story-splitting-for-delivery" ~/.codex/skills/story-splitting-for-delivery
+ln -s "$PWD/skills/story-splitting-for-delivery" ~/.copilot/skills/story-splitting-for-delivery
 ```
 
 ### Project-local
@@ -56,18 +57,19 @@ otter-skills/
   docs/
     PLAN.md               # consolidation / packaging plan
   skills/
-    iterative-story-split/
+    story-splitting-for-delivery/
     user-pov-sliced-stories/
-    unit_testing/
-    ottinger-code-review/
+    unit-testing/
+    representation-refactor-review/
     code-object-naming/
+    legacy-code-safety/
   dist/                   # generated .skill packages
   vendor-sources/         # optional read-only snapshots used while authoring
 ```
 
 ## Status
 
-**Scaffolding.** Skill content is being consolidated from existing local skills and source manuscripts. See [docs/PLAN.md](docs/PLAN.md).
+**Content drafted; integration validation in progress.** See [docs/PLAN.md](docs/PLAN.md).
 
 ## License (pending)
 

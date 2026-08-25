@@ -1,0 +1,280 @@
+---
+name: unit-testing
+description: Implement or extend production behavior test-first, or diagnose focused unit-test quality and flakiness, using red-green-refactor, ZOMBIES, Tidy First?, FIRST microtests, and Save Your Game checkpoints. Use for TDD, microtests, test-first bug fixes, flaky tests, and refactoring within an active green cycle. Do not use to choose delivery slices, format user stories, conduct a broad representation review, or perform a focused identifier-naming analysis; those belong to the corresponding sibling skills.
+---
+
+# Unit Testing (TDD · Microtests · ZOMBIES · Tidy First? · Eight Virtues)
+
+## When to use this skill
+
+**Use `unit-testing` when:**
+- Implementing new behavior or extending existing behavior with production code
+- Bug fixes that require new logic (characterize with a failing test first)
+- Choosing the next test to write (ZOMBIES ordering)
+- Deciding whether to tidy before writing the next test (Tidy First?)
+- Refactoring production or test code toward the Eight Code Virtues within an active TDD cycle
+- Diagnosing flaky, slow, or poorly-structured tests using FIRST
+- Any session where you would otherwise "code then sprinkle tests"
+
+**Do NOT use `unit-testing` for:**
+- Establishing initial test access or characterizing poorly understood existing behavior → use `legacy-code-safety`, then return here
+- Choosing which delivery slice to build next → use `story-splitting-for-delivery`
+- Formatting an already-split story as user-visible outcomes → use `user-pov-sliced-stories`
+- Reviewing code broadly for representation or virtue violations without an active TDD cycle → use `representation-refactor-review`
+- Performing a focused identifier diagnosis or rename plan → use `code-object-naming`
+- Trunk-landing strategies, feature toggles, or branch-by-abstraction (out of scope for this package)
+
+---
+
+## Purpose and scope
+
+TDD is programming hygiene. Its job is not "prove the whole system" or "raise coverage." Its job is to keep code orderly and **safe to change in tiny steps** so you can refactor, integrate, and deliver without fear.
+
+- **Timely, not Thorough:** test-first keeps code testable and orderly; component, contract, E2E, and human testing are still required and not replaced by microtests.
+- **Test-after is not TDD:** writing tests after a production pile recreates legacy conditions — hard-to-test shapes, fear of breaking "what already works," and joyless test-after work.
+- **Review is not a substitute for tests:** `representation-refactor-review` catches representation drift and virtue violations but does not replace the microtest hygiene loop this skill owns.
+
+---
+
+## Preconditions: Clean Start
+
+Before the first production edit of a task:
+
+1. Working tree intentional and tidy — no mystery untracked junk, no unrelated half-work.
+2. Current with the integration branch when project practice and the user's authorization allow the required fetch/pull.
+3. Dependencies updated the repo's way.
+4. Clean build if the stack needs one.
+5. **All relevant tests green** — use `./prepare` or `./run_tests` when present.
+
+If anything is red before your changes, stop. That is an inherited problem; do not pile new work on a broken baseline.
+
+Run the fast suite after each small step. Testing never needs permission.
+
+---
+
+## The cycle (do not skip steps)
+
+Work one behavior at a time. Keep cycles short enough that retreat is cheap.
+
+```text
+clean/green baseline
+  → Tidy First? (First / After / Later / Never)
+  → pick ONE next behavior (ZOMBIES order)
+  → write a failing microtest (red, for the right reason)
+  → write minimum production code to pass (green)
+  → refactor toward the Virtues (stay green)
+  → save an authorized green checkpoint (Save Your Game)
+  → repeat
+```
+
+### Red
+
+- Name the behavior in domain language (situation + expectation).
+- Exercise a realistic public API you wish existed; let the test design the call site.
+- Fail because the behavior is missing or wrong — **not** from `fail()` hacks or compile errors as placeholders.
+- Only enough test to fail meaningfully. One primary reason to fail; clear assertion message.
+
+### Green
+
+- Only enough production code to make the suite pass.
+- No speculative features; no extra branches "while you're here."
+- You may change design for testability; that is expected.
+- When anything is red, your only job is restoring green — including **graceful retreat** to the last good commit if the step went sideways.
+
+### Refactor
+
+- Required, not optional. Skipping refactor is how suites and designs rot.
+- Remove duplication; clarify names; improve structure **while green**.
+- Refactor tests too; treat them as production-grade code.
+- Prefer automated IDE/LSP refactor tools over manual cut/paste.
+- Stay structure-shy (see below) so tests do not freeze internals.
+
+### Integrate / Save Your Game
+
+- When green, save a checkpoint. Use a **microcommit** only when the user has authorized commits and project practice calls for them; otherwise preserve and report the green diff without committing.
+- One intentional change per commit; park side quests on a list rather than mixing them.
+- Before tricky attempts, use an authorized recoverable checkpoint. If confused, retreat without discarding unrelated user work, then redo smaller.
+- Task is not complete while tests fail.
+
+---
+
+## ZOMBIES: ordered test selection
+
+Maintain a scenario list. Pick the next test using ZOMBIES, not arbitrarily:
+
+1. **Zero** — the null/empty/trivial case first.
+2. **One** — a single simple instance.
+3. **Many (More complex)** — the general case, once Zero and One both pass.
+4. At each of those stages, separately attend to:
+   - **Boundary** — edge values at that complexity level.
+   - **Interface** — does the shape of the call still make sense as scenarios accumulate?
+   - **Exception** — the failure/error path for that stage.
+5. **Simple scenarios, Simple solutions** — resist writing a Many-complexity test while Zero/One are unproven. Resist over-engineering the implementation ahead of what the current test demands.
+
+**One test at a time.** Never write a batch of tests and fill them in after — batching commits to interface decisions before the first implementation has taught you anything. Canon TDD names this a failure mode (rework, "test #6 depression") for a concrete reason.
+
+---
+
+## Tidy First? (before each next test)
+
+Before writing each next test, ask explicitly: **First, After, Later, or Never?**
+
+- **First** — current structure would make the upcoming test awkward or impossible to add cleanly. Do the structural change now, as its own step: tests green before and after, no behavior change, separate commit from the behavior that follows. This is "make the change easy, then make the easy change."
+- **After** — structure is fine for this test; land the behavior now, clean up in the refactor step once green.
+- **Later** — worth doing eventually, not blocking right now. Note it (comment, ticket, journal — whatever the project already uses) and proceed.
+- **Never** — the cost of tidying exceeds the benefit. Say so and move on; don't tidy reflexively.
+
+Prefer LSP-backed rename/extract tools or `ast-grep` structural rewrite over hand-editing for any First or post-green structural change — mechanical and deterministic beats agent-reasoned-and-regenerated for moves a tool can do exactly. Reserve model reasoning for the judgment call (which option, and why), not for typing out a rename across a dozen call sites.
+
+---
+
+## Microtests (FIRST)
+
+TDD's inner loop uses **microtests** (unit tests that meet FIRST):
+
+| Letter | Meaning |
+|--------|---------|
+| **F**ast | Milliseconds preferred; no real network/DB/filesystem/clock/services |
+| **I**solated | No shared mutable state; any order; one behavior |
+| **R**epeatable | Same result every run; control time/randomness/threads |
+| **S**elf-verifying | Assert automatically; no manual log inspection |
+| **T**imely | Written before/with the code, not after a big bang |
+
+Rules of thumb:
+
+- Test the unit in an **artificial** context, not full app context.
+- If you need DB/HTTP/clock, fake or inject them — or move this test to a slower suite.
+- Do not grow a heavyweight test framework to compensate; shrink the test and the unit boundary.
+- Microtests do not replace component, contract, story/BDD, E2E, or human checks. They make those affordable by keeping units honest.
+- **High-fidelity rule:** production code must not branch on "am I being tested?"
+
+### Outside-in option
+
+A failing higher-level example/story test may hang red while you drive the interior with microtests. Still do not bulk-write production code without microtest guidance for decisions and transformations.
+
+---
+
+## Write tests that enable refactoring (structure-shy)
+
+Bad tests block the purpose of TDD.
+
+**Behavior over structure**
+
+- Read tests to understand code; never require reading production code to understand tests.
+- Assert observable results and meaningful outcomes, not incidental private structure.
+- Prefer scenario-oriented organization (shared arrange = shared situation) over rigid "one test class per production class" when clarity suffers.
+
+**Structure-shy (Law of Demeter / "one dot")**
+
+- Do not reach through deep graphs in tests or production (`a.b.c.d`).
+- Talk to immediate collaborators; push knowledge behind intention-revealing methods.
+- Deep coupling in tests makes refactors fail everywhere and teaches teams to fear improvement.
+
+**Assertions and names**
+
+- Use assertions that print useful expected/actual values.
+- Test name + assertion should diagnose the mistake without reading the whole test body.
+- Avoid magic values; name domain-meaningful constants.
+
+**Side effects**
+
+- Prefer testing direct results over obscure global/file/DB side effects.
+- Side-effect-heavy tests usually signal low-cohesion design — improve the design.
+
+---
+
+## Refactor toward the Eight Virtues
+
+When refactoring (optionally after each green; required in CLEANUP), target named virtues rather than vague "cleanup":
+
+**Working** is non-negotiable. **Unique, Simple, Clear, Easy, Developed, Brief, and Coherent are peers in balance**; no peer has a fixed rank. Never pursue Brief at the expense of Working or overall representation quality.
+
+- **Unique / SPOT** — is this fact stated in exactly one place? Duplication hints at a Unique violation. Do not abstract ahead of a real second instance.
+- **Simple** — fewer operators/operands/paths, independent of naming.
+- **Clear** — would multiple readers agree on what this does, independent of Simple.
+- **Easy** — is the right next change actually easy to make, or would it require touching many places?
+- **Developed** — still using raw primitives where a real type/abstraction has emerged? (Watch for Primitive Obsession, Feature Envy.)
+- **Coherent** — does this vocabulary, pattern, and structure agree with the rest of the system, not just read well in isolation? Especially useful for keeping agent-written code from drifting into locally-sound-but-globally-inconsistent vocabulary.
+- **Brief** — remove excess that adds no value, while balancing it with Clear, Easy, Developed, and the other peers.
+
+Use LSP rename / `ast-grep` for mechanical moves (Extract Method, Rename, Replace Temp with Query — Fowler's catalog); use model judgment only to decide *which* virtue is violated and what the target shape should be.
+
+---
+
+## Affordable feedback
+
+Defect cost tracks how long bugs sit undetected. Slow suites make people run tests less, which makes debugging worse.
+
+- Keep the coding suite fast enough to run after nearly every edit.
+- Segregate slow tests; do not pretend UI/API tests are microtests.
+- Replace slow broad tests of pure logic with microtests of that logic.
+- Flaky tests destroy trust — fix causes (over-specification, shared state, time, external services, order dependence). Do not normalize "rerun until green."
+
+---
+
+## Diagnosing FIRST violations
+
+| Symptom | Likely violation | Common root causes |
+|---------|-----------------|-------------------|
+| Fails intermittently | Repeatable | Clock, threads, randomness, env difference |
+| Passes alone, fails in suite | Isolated | Shared state, static caches, DB residue |
+| Fails only in CI | Repeatable | Env config, concurrency, race conditions |
+| Slow and unstable | Fast | Real network/DB calls, large fixtures |
+| Unclear failure signal | SelfVerifying | Missing/weak assertions, log-inspection reliance |
+
+Repair approaches: inject clock abstractions; seed RNG; use synchronization primitives (remove `sleep()`); reset state in setup/teardown; eliminate globals; replace real services with in-memory fakes or doubles.
+
+---
+
+## What TDD is not (avoid cargo cult)
+
+| Misunderstanding | Reality |
+|-----------------|---------|
+| TDD = QA / system validation | TDD enables safe change; other testing still required |
+| TDD = maximize coverage % | Coverage is a side effect; goal is safe change |
+| Write all tests first in a batch | One failing test at a time, in cycle |
+| Testers hand devs unit tests | Developers own the microtest cycle and refactor |
+| Skip green/refactor because "trivial" | Small skips accumulate into untestable mess |
+| Integration is "not TDD" | Integrate continuously; outside-in is valid |
+| Tests must mirror class structure | Tests must document behavior and survive refactor |
+| Timely means Thorough | Write tests when writing the code; exhaustive coverage is not the goal |
+
+---
+
+## Session algorithm
+
+1. **Clean start** — baseline green (`./prepare` / `./run_tests` as available).
+2. **List** candidate behaviors for the slice in ZOMBIES order (short checklist).
+3. **Tidy First?** — ask First/After/Later/Never before each next test.
+4. **Pick one** behavior; optionally draft the commit message (intentional commit).
+5. **Red** — microtest for that behavior; confirm failure reason is correct.
+6. **Green** — minimal code; run tests (full fast suite or project norm).
+7. **Refactor** — tidy prod + tests toward named virtues; run tests again.
+8. **Save** — create an authorized green checkpoint; microcommit only when permitted; note next behaviors.
+9. If stuck more than one small step of confusion → **retreat** to last green and choose a smaller behavior.
+10. Leave the tree green. Never end a coding session on red you introduced.
+
+---
+
+## Anti-patterns to refuse
+
+See `references/anti-patterns.md` for the quick-reference list. Key ones:
+
+**Process:** production code before a failing test; big-bang implementation then tests; skipping refactor; batching tests before implementing any; leaving suite red while starting another concern; huge uncommitted WIP; normalizing "rerun until green."
+
+**Test design:** tests coupled to private structure or deep-graph navigation; one test asserting many unrelated behaviors; shared mutable fixtures leaking across tests; real time/network/DB/filesystem/sleep in microtests; production code that detects test mode; test names that restate technical methods instead of domain situations.
+
+**Refactor:** vague "cleanup" without targeting a named virtue; hand-editing renames across many files when LSP/`ast-grep` can do it exactly; pursuing Brief at the cost of Clear or Working.
+
+**Scope confusion:** expecting microtests alone to prove product fitness; treating coverage % as the goal; weakening or rewriting existing tests to accept broken behavior without explicit human approval.
+
+---
+
+## Interaction with other skills
+
+- `legacy-code-safety` — establishes a trustworthy boundary around poorly understood or weakly tested existing code. Once that boundary can detect relevant change, this skill owns the new behavior cycle.
+- `story-splitting-for-delivery` — choose and sequence thin vertical delivery slices; `unit-testing` implements each admitted slice with TDD discipline. Do not use `unit-testing` to choose the split.
+- `user-pov-sliced-stories` — formats an already-split story as explicit User-invokes / User-uses-result outcomes. `unit-testing` does not own that formatting.
+- `representation-refactor-review` — owns broad representation critique, including ZOM drift. The Eight Virtues vocabulary is shared: `unit-testing` applies it inside the active green cycle; the review skill applies it when review itself is the task.
+- `code-object-naming` — owns focused identifier diagnosis and rename planning. Routine naming improvements inside the green refactor step remain part of `unit-testing`; defer only a deeper naming pass.
+- **Existing tests are contracts:** do not weaken or rewrite existing tests to accept broken behavior unless the user explicitly approves and reviews the shown change.
