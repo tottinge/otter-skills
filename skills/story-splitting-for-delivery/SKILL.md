@@ -1,7 +1,8 @@
 ---
 name: story-splitting-for-delivery
 description: >
-  Split oversized features, epics, and stories into thin deployable slices
+  Split oversized features, epics, and stories into thin, demonstrable,
+  deployable slices
   through progressive admission: start with a closed end-to-end skeleton, then
   admit one case at a time. Use to choose or sequence delivery slices, including
   message, schema, import, API, form, path, rule, persona, or channel rollouts.
@@ -15,7 +16,7 @@ description: >
 This is the primary story-splitting skill.
 Build the end-to-end path first, fully closed. Then admit one safe case at a time.
 Everything not yet admitted stays rejected — invalid, unsupported, or not implemented.
-Each admission is a thin, testable, ideally deployable story.
+Each admission is a thin, testable, demonstrable, ideally deployable story.
 
 This is related to walking skeleton / tracer bullet thinking, but the distinctive move is **default-deny with progressive widening**.
 
@@ -39,6 +40,7 @@ A good admission slice:
 - admits exactly one new case, shape, type, field set, or rule
 - continues to reject all non-admitted cases with a stable response
 - is unit-testable and end-to-end testable
+- produces an observable result that can be demonstrated without later admissions
 - could be deployed without harming unhandled traffic
 - leaves room to TDD and refactor after green
 
@@ -127,6 +129,9 @@ Produce a short admission plan, not a component task list.
 ## Slice 0 — Start closed
 - **Admits:** nothing useful
 - **Behavior:** every input rejected by the established pattern
+- **Someone invokes:** <how a client, user, or stakeholder exercises the closed path>
+- **Observable result:** <stable rejection, error, status, or diagnostic they can see>
+- **Independent demonstration:** <how to show this result without later slices>
 - **User/stakeholder value:** clients, errors, deploy path, and tests work end to end
 - **Acceptance checks:**
   - <check>
@@ -136,6 +141,9 @@ Produce a short admission plan, not a component task list.
 ## Slice 1 — <first admission title>
 - **Admits:** <exact case>
 - **Behavior:** <what happens for that case only>
+- **Someone invokes:** <the action, request, message, or input that exercises this case>
+- **Observable result:** <what the invoker can see or use>
+- **Independent demonstration:** <how to show this result without later admissions>
 - **User/stakeholder value:** <why this admission matters now>
 - **Acceptance checks:**
   - admitted case works
@@ -169,7 +177,9 @@ Ask:
 - Is the end-to-end path still intact?
 - Does this admit only one new case?
 - Are non-admitted cases still rejected the same way?
-- Can we demo or deploy this without waiting for later admissions?
+- Can someone invoke this slice and observe a meaningful result?
+- Can we demonstrate and deploy it without waiting for later admissions?
+- Is it clear why this result is worth admitting now?
 - Are unit and end-to-end checks obvious?
 - If we stopped after this slice, would the system remain coherent?
 
@@ -203,7 +213,10 @@ Capability: process queue messages for account updates.
 6. **Admit `AccountClosed`**.
 7. Keep unknown types on `not_implemented`.
 
-Each step is independently testable and potentially releasable.
+Demonstrate each step by submitting the newly admitted message and showing its
+observable response, then submitting an unadmitted message and showing that the
+stable rejection still holds. Each step is independently demonstrable,
+testable, and potentially releasable.
 
 ## Relationship to nearby skills
 - `story-splitting-for-delivery` (this skill): primary splitter; progressive admission sequence.
