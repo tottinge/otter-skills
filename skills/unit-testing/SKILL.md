@@ -36,6 +36,60 @@ TDD is programming hygiene. Its job is not "prove the whole system" or "raise co
 
 ---
 
+## What requires test evidence
+
+Before changing production behavior, make a short **Beck-style test list** of
+behavioral examples and concerns. This is not a manual test plan or a scripted
+series of human actions and observations. It is a revisable list of tests that
+might be needed; implement only one test at a time and update the list as the
+code teaches you more.
+
+A test list is required when work creates or changes:
+
+- decisions or alternatives: `if`/`else`, conditional expressions, pattern
+  matching, `switch`/`case`
+- repetition, selection, grouping, ordering, or aggregation:
+  `for`/`while`, filters, folds, queries
+- calculations, conversions, parsing, formatting, or validation
+- documents, classes, records, messages, entities, or other data
+- persistence, retrieval semantics, state transitions, or side effects
+- error handling, retries, fallbacks, authorization, or boundary enforcement
+- any behavior where different inputs, states, or circumstances should produce
+  meaningfully different results
+
+At minimum, consider and list:
+
+- ordinary successful examples
+- anticipated errors and rejected inputs
+- boundary conditions and transitions
+
+The test list is inventory, not a batch to write in advance. Select the next
+test with ZOMBIES, make it pass, refactor, and then reconsider the list.
+
+### Choose the test level
+
+Decision and transformation logic normally belongs under FIRST microtests.
+Behavior that depends on a real boundary needs the smallest faithful automated
+test capable of establishing it:
+
+- persistence semantics may require an integration test against the real store
+- document creation may require a component, approval, schema, or round-trip test
+- messages and public interfaces may require contract or serialization tests
+- user workflows may require story, component, or end-to-end tests
+
+Extract decision or transformation logic into microtestable units when that
+improves the design. Do not replace necessary high-fidelity evidence with mocks
+that cannot establish the real behavior.
+
+Dedicated microtests are usually unnecessary for simple wiring or delegation,
+read-only accessors that merely return stored state, generated code, trivial
+data carriers, or declarative framework configuration. These may be exercised
+indirectly by a faithful higher-level test. Add focused tests when apparently
+simple code acquires a decision, transformation, contract, or meaningful
+failure mode.
+
+---
+
 ## Preconditions: Clean Start
 
 Before the first production edit of a task:
@@ -60,7 +114,7 @@ Work one behavior at a time. Keep cycles short enough that retreat is cheap.
 clean/green baseline
   → Tidy First? (First / After / Later / Never)
   → pick ONE next behavior (ZOMBIES order)
-  → write a failing microtest (red, for the right reason)
+  → write the next failing test at the chosen level (normally a microtest)
   → write minimum production code to pass (green)
   → refactor toward the Virtues (stay green)
   → save an authorized green checkpoint (Save Your Game)
@@ -100,7 +154,7 @@ clean/green baseline
 
 ## ZOMBIES: ordered test selection
 
-Maintain a scenario list. Pick the next test using ZOMBIES, not arbitrarily:
+Maintain the Beck-style test list. Pick the next test using ZOMBIES, not arbitrarily:
 
 1. **Zero** — the null/empty/trivial case first.
 2. **One** — a single simple instance.
@@ -244,10 +298,10 @@ Repair approaches: inject clock abstractions; seed RNG; use synchronization prim
 ## Session algorithm
 
 1. **Clean start** — baseline green (`./prepare` / `./run_tests` as available).
-2. **List** candidate behaviors for the slice in ZOMBIES order (short checklist).
+2. **Test list** — inventory likely successes, errors, and boundaries; do not write the tests as a batch.
 3. **Tidy First?** — ask First/After/Later/Never before each next test.
 4. **Pick one** behavior; optionally draft the commit message (intentional commit).
-5. **Red** — microtest for that behavior; confirm failure reason is correct.
+5. **Red** — write the next test at the chosen level (normally a FIRST microtest); confirm its failure reason is correct.
 6. **Green** — minimal code; run tests (full fast suite or project norm).
 7. **Refactor** — tidy prod + tests toward named virtues; run tests again.
 8. **Save** — create an authorized green checkpoint; microcommit only when permitted; note next behaviors.
