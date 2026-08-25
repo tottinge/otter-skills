@@ -1,89 +1,58 @@
 # otter-skills
 
-Portable agent skills for software craft, drawn primarily from Tim Ottinger’s writing (Agile Otter, Industrial Logic) and related practice notes.
+Portable agent skills for software craft, drawn primarily from Tim Ottinger's writing (Agile Otter, Industrial Logic) and related practice notes.
 
-These skills are meant to install cleanly for **Claude**, **Codex**, **Copilot**, and **Warp** (and other tools that discover `SKILL.md` trees).
+The repository is both a plugin marketplace and a directly installable Agent Skills collection for Codex, Claude Code, GitHub Copilot CLI, Warp, and other tools that discover `SKILL.md` trees.
 
 ## Skills
 
 | Skill | Purpose |
-|-------|---------|
+| --- | --- |
 | `atomic-commit` | Preserve trustworthy history as complete, green, human-vetted repository states |
-| `story-splitting-for-delivery` | Primary story splitter via **progressive admission** (start closed → admit one case → default reject) |
-| `user-pov-sliced-stories` | Format slices as **User invokes** / **User uses result** (formatter; defers split choice) |
-| `unit-testing` | Microtests + TDD hygiene (FIRST, Canon TDD, ZOMBIES, Tidy First?, virtue-targeted refactor) |
-| `representation-refactor-review` | Review through the **Eight Code Virtues**, including ZOM representation drift |
-| `code-object-naming` | Naming guidance distilled from the short guide to naming manuscript |
-| `legacy-code-safety` | Characterize poorly understood behavior, create minimal seams, and change risky existing code safely |
+| `story-splitting-for-delivery` | Split work through progressive admission: start closed, admit one case, default-reject the rest |
+| `user-pov-sliced-stories` | Format chosen slices as **User invokes** / **User uses result** |
+| `unit-testing` | Apply FIRST microtests and the Clean Start → Tidy? → Red → Green → Refactor → Atomic Commit → Integrate loop |
+| `representation-refactor-review` | Review through the Eight Code Virtues, including ZOM representation drift |
+| `code-object-naming` | Improve code-object names using the naming short-guide workflow |
+| `legacy-code-safety` | Characterize behavior, create minimal seams, and change risky existing code safely |
 
-Skill bodies live under `skills/<name>/` with a required `SKILL.md`.
+The canonical skill trees live in [`plugins/otter-skills/skills/`](plugins/otter-skills/skills/). Each directory basename matches its `SKILL.md` frontmatter `name`.
 
 ## Install
 
-Each skill is a directory containing `SKILL.md` (and optional `references/`, `agents/openai.yaml`, etc.).
+Install the complete collection as a plugin, or install/copy individual skill directories. See [Installation](docs/INSTALL.md) for Codex, Claude Code, Copilot CLI, project-local, and manual instructions.
 
-### Global (user home)
-
-Copy or symlink a skill folder into any of:
-
-- `~/.agents/skills/` (recommended for Warp)
-- `~/.claude/skills/`
-- `~/.codex/skills/`
-- `~/.copilot/skills/`
-- `~/.cursor/skills/` (and other tool-specific skill roots)
-
-Example:
-
-```bash
-ln -s "$PWD/skills/story-splitting-for-delivery" ~/.agents/skills/story-splitting-for-delivery
-ln -s "$PWD/skills/story-splitting-for-delivery" ~/.claude/skills/story-splitting-for-delivery
-ln -s "$PWD/skills/story-splitting-for-delivery" ~/.codex/skills/story-splitting-for-delivery
-ln -s "$PWD/skills/story-splitting-for-delivery" ~/.copilot/skills/story-splitting-for-delivery
-```
-
-### Project-local
-
-The same directories work under a repo root, e.g. `.agents/skills/`, `.claude/skills/`, `.codex/skills/`, `.copilot/skills/`.
-
-### Packaged `.skill` files
-
-When present, zip packages will live in `dist/` (one `.skill` per skill directory). Install using your tool’s skill-package flow, or unzip into a skills root.
-
-## Layout
+## Repository layout
 
 ```text
 otter-skills/
-  README.md
-  LICENSE                 # pending final choice
+  .agents/plugins/marketplace.json       # Codex marketplace
+  .claude-plugin/marketplace.json        # Claude marketplace
+  .github/plugin/marketplace.json        # Copilot marketplace
+  plugins/otter-skills/
+    .codex-plugin/plugin.json
+    .claude-plugin/plugin.json
+    skills/<skill-name>/SKILL.md
+  scripts/
+    package_skills.py
+    validate_repo.py
+  dist/                                  # reproducible per-skill archives
   docs/
-    PLAN.md               # consolidation / packaging plan
-  skills/
-    atomic-commit/
-    story-splitting-for-delivery/
-    user-pov-sliced-stories/
-    unit-testing/
-    representation-refactor-review/
-    code-object-naming/
-    legacy-code-safety/
-  dist/                   # generated .skill packages
-  vendor-sources/         # optional read-only snapshots used while authoring
 ```
 
-## Status
+Run `python3 scripts/validate_repo.py` before publishing. Run `python3 scripts/package_skills.py` to rebuild `dist/`.
 
-**Content drafted; integration validation in progress.** See [docs/PLAN.md](docs/PLAN.md).
+## License
 
-## License (pending)
+Licensed under Apache-2.0 for commercial and open-source use. See [LICENSE](LICENSE). The [NOTICE](NOTICE) file preserves credit for the writers and practitioners whose published work materially informed these skills; more specific source notes remain beside the relevant skills.
 
-Intended for free and commercial use. Final license text is **not** chosen yet (`LICENSE` is a stub). Options under consideration include MIT, Apache-2.0, and CC BY 4.0 (and similar). Decide after the skill set is populated.
+## Sources
 
-## Sources (high level)
+- Agile Otter — progressive admission, story splitting, Eight Code Virtues, FIRST, and microtesting
+- Industrial Logic — TDD purposes and practices, structure-shy tests, and software-craft writing
+- Tim Ottinger's naming short-guide manuscript
+- Kent Beck, Michael Feathers, Martin Fowler, Emily Bache, Llewellyn Falco, and GeePaw Hill — see [NOTICE](NOTICE) and skill-local source notes
 
-- Agile Otter — progressive admission, story splitting listicle, Eight Code Virtues, FIRST/microtesting
-- Industrial Logic — TDD purposes/practices, structure-shy tests, craft writing
-- Naming short guide manuscript (`naming_shortguide`)
-- Local skill drafts under `~/.agents/skills`, `~/Projects/otter-skill`, `~/Projects/tdd-skill`, and `~/Downloads/canonical-tdd-skill.md`
+## Contributing
 
-## Contributing / working here
-
-Work in this repository from here forward. Prefer small commits. Do not expand scope into license bikeshedding until skills are in place.
+Keep each change coherent and the repository green. Update the canonical plugin tree only; generated archives belong in `dist/`. Contributions are accepted under the repository's Apache-2.0 license.

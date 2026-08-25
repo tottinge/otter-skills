@@ -28,11 +28,9 @@ A broad representation review may still surface naming and test-design evidence.
 | Load | When |
 | --- | --- |
 | This file | Always when the skill is active |
-| `references/virtues.md` | Before writing findings — definitions, improvement test, Coherent, comments |
-| `references/naming.md` | Naming sweep or name-heavy code |
-| `references/architecture.md` | Module boundaries, dependencies, or design structure |
+| [`references/virtues.md`](references/virtues.md) | Before writing findings — definitions, improvement test, Coherent, comments |
 
-Keep the workflow here; put depth in the references. Do not load every reference by default.
+Keep the workflow here; put depth in the reference. Use the sibling `code-object-naming` skill when a review needs a dedicated naming pass.
 
 ## Mindset
 
@@ -52,7 +50,7 @@ Internalize these before reading a line:
 
 1. **Establish Working first.** Inspect the project instructions and diff before choosing checks. Run the narrowest relevant existing tests when the user has asked for a review and local, non-mutating verification is available. If you cannot verify behaviour, state that limitation. Missing tests is a finding only when it creates a concrete regression risk for changed behaviour; absence alone is not automatically P1.
 2. **Read for the audience.** Flag every place you reverse-engineered intent.
-3. **Pass systematically against the Eight Virtues and naming.** Read `references/virtues.md`. Add `references/naming.md` for the naming sweep. Add `references/architecture.md` when boundaries matter. Go virtue by virtue (Working, then the seven peers). Do not pattern-match a few smells and stop. **Within the Unique, Developed, and Coherent passes, run the ZOM Drift sub-pass (see below).**
+3. **Pass systematically against the Eight Virtues and naming.** Read [`references/virtues.md`](references/virtues.md). Use `code-object-naming` for a naming-heavy sub-pass. Go virtue by virtue (Working, then the seven peers), including boundaries and dependencies when they are in scope. Do not pattern-match a few smells and stop. **Within the Unique, Developed, and Coherent passes, run the ZOM Drift sub-pass (see below).**
 4. **For every concern capture:** (a) location, (b) virtue(s) under pressure, (c) concrete refactoring, (d) *why it matters* to audience/maintenance. No "why" → drop it.
 5. **Prioritize and assemble** the final report in the format below.
 

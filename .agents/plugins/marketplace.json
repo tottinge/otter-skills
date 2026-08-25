@@ -1,0 +1,12 @@
+{
+  "name": "otter-skills",
+  "interface": { "displayName": "Otter Skills" },
+  "plugins": [
+    {
+      "name": "otter-skills",
+      "source": { "source": "local", "path": "./plugins/otter-skills" },
+      "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+      "category": "Developer Tools"
+    }
+  ]
+}

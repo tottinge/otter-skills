@@ -1,0 +1,19 @@
+{
+  "name": "otter-skills",
+  "version": "0.1.0",
+  "description": "Portable software-craft skills for thin delivery, TDD, safe change, naming, refactoring, and trustworthy commits.",
+  "author": { "name": "Tim Ottinger" },
+  "repository": "https://github.com/tottinge/otter-skills",
+  "homepage": "https://github.com/tottinge/otter-skills",
+  "license": "Apache-2.0",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Otter Skills",
+    "shortDescription": "Software-craft workflows for coding agents",
+    "longDescription": "Operational skills for progressive-admission story slicing, test-driven development, safe legacy change, knowledge-representation review, naming, and atomic commits.",
+    "developerName": "Tim Ottinger",
+    "category": "Developer Tools",
+    "capabilities": ["Story slicing", "Test-driven development", "Refactoring", "Code review", "Atomic commits"],
+    "defaultPrompt": "Use the relevant Otter skill to guide this software-development task."
+  }
+}

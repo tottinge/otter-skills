@@ -1,4 +1,6 @@
-# otter-skills: consolidate and package agent skills
+# otter-skills: consolidation and packaging record
+
+> Historical planning record. Consolidation is complete; the canonical, installable tree is now `plugins/otter-skills/skills/`. See [Installation](INSTALL.md) for current paths and commands.
 
 ## Problem
 
@@ -18,7 +20,7 @@ Craft skills are scattered across `~/.agents/skills`, `~/Projects/otter-skill`, 
   README.md
   LICENSE          # placeholder stub only; final choice after populate
   docs/PLAN.md
-  skills/
+  plugins/otter-skills/skills/
     atomic-commit/                    # complete, green, human-vetted repository states
     legacy-code-safety/             # characterize, create seams, and hand safe changes to TDD
     story-splitting-for-delivery/   # was iterative-story-split; dir === name
@@ -30,12 +32,12 @@ Craft skills are scattered across `~/.agents/skills`, `~/Projects/otter-skill`, 
   vendor-sources/  # read-only snapshots while authoring
 ```
 
-Each skill directory is tool-portable:
+Each skill directory under `plugins/otter-skills/skills/` is tool-portable:
 
 - Required: `SKILL.md` (YAML `name` + pushy `description` + body)
 - Optional: `references/`, `scripts/`, `README.md` (skill-local)
 - Codex: `agents/openai.yaml` (`display_name`, `short_description`, `default_prompt`, `allow_implicit_invocation`)
-- Claude/Copilot: same `SKILL.md` tree; README documents copy/symlink into `~/.claude/skills`, `~/.codex/skills`, `~/.copilot/skills`, and repo-local `.claude/skills` / `.codex/skills` / `.copilot/skills` / `.agents/skills`
+- Claude/Copilot: same `SKILL.md` tree; [Installation](INSTALL.md) documents current global and project-local discovery paths
 
 Keep packages lean: no eval workspaces, no full article dumps inside skills unless a short `references/` digest is needed. Point to Agile Otter / Industrial Logic / manuscript sources in README and skill Sources sections.
 
