@@ -112,13 +112,14 @@ Work one behavior at a time. Keep cycles short enough that retreat is cheap.
 
 ```text
 clean/green baseline
+  → update the Beck-style test list; pick ONE next behavior (ZOMBIES order)
   → Tidy First? (First / After / Later / Never)
-  → pick ONE next behavior (ZOMBIES order)
   → write the next failing test at the chosen level (normally a microtest)
   → write minimum production code to pass (green)
   → refactor toward the Virtues (stay green)
-  → save an authorized green checkpoint (Save Your Game)
-  → repeat
+  → authorized atomic microcommit (Save Your Game)
+  → integrate: combine, verify, publish when authorized
+  → repeat from a clean, current baseline
 ```
 
 ### Red
@@ -143,12 +144,20 @@ clean/green baseline
 - Prefer automated IDE/LSP refactor tools over manual cut/paste.
 - Stay structure-shy (see below) so tests do not freeze internals.
 
-### Integrate / Save Your Game
+### Atomic microcommit / Save Your Game
 
-- When green, save a checkpoint. Use a **microcommit** only when the user has authorized commits and project practice calls for them; otherwise preserve and report the green diff without committing.
-- One intentional change per commit; park side quests on a list rather than mixing them.
-- Before tricky attempts, use an authorized recoverable checkpoint. If confused, retreat without discarding unrelated user work, then redo smaller.
+- When the intentional step is complete and green, use `atomic-commit` to prepare the whole repository state, obtain human review, and commit only when authorized.
+- The atomic microcommit is the local **Save Your Game** point: coherent, tested, recoverable, and distinct from publishing to collaborators. Human review belongs inside this rapid loop; do not enlarge the step merely to reduce review frequency.
+- Park side quests instead of mixing them. Before tricky attempts, use an authorized recoverable checkpoint. If confused, retreat without discarding unrelated user work, then redo smaller.
+- If a commit is not authorized, preserve and report the green diff without committing.
 - Task is not complete while tests fail.
+
+### Integrate
+
+- Integration is a separate step after the local Save Your Game point: obtain current shared changes, combine them with the completed change, and rerun the prescribed checks on that newly combined state.
+- Publish only when project practice calls for it and the user has authorized the external action.
+- Any integration operation that creates or rewrites commits remains subject to the complete-state review and verification rules in `atomic-commit`.
+- Do not call a local commit "integrated" when collaborators cannot yet obtain it. Do not publish a combined state that has not been tested.
 
 ---
 
@@ -289,7 +298,7 @@ Repair approaches: inject clock abstractions; seed RNG; use synchronization prim
 | Write all tests first in a batch | One failing test at a time, in cycle |
 | Testers hand devs unit tests | Developers own the microtest cycle and refactor |
 | Skip green/refactor because "trivial" | Small skips accumulate into untestable mess |
-| Integration is "not TDD" | Integrate continuously; outside-in is valid |
+| Integration is "not TDD" | Save locally, then integrate continuously; verify the combined state |
 | Tests must mirror class structure | Tests must document behavior and survive refactor |
 | Timely means Thorough | Write tests when writing the code; exhaustive coverage is not the goal |
 
@@ -304,9 +313,10 @@ Repair approaches: inject clock abstractions; seed RNG; use synchronization prim
 5. **Red** — write the next test at the chosen level (normally a FIRST microtest); confirm its failure reason is correct.
 6. **Green** — minimal code; run tests (full fast suite or project norm).
 7. **Refactor** — tidy prod + tests toward named virtues; run tests again.
-8. **Save** — create an authorized green checkpoint; microcommit only when permitted; note next behaviors.
-9. If stuck more than one small step of confusion → **retreat** to last green and choose a smaller behavior.
-10. Leave the tree green. Never end a coding session on red you introduced.
+8. **Atomic microcommit / Save Your Game** — when authorized, use `atomic-commit` to review and preserve the complete green state; otherwise report the green diff.
+9. **Integrate** — when authorized, incorporate shared changes, verify the combined state, and publish; do not conflate this with the local commit.
+10. If stuck more than one small step of confusion → **retreat** to the last green saved state and choose a smaller behavior.
+11. Repeat from a clean, current baseline. Never end a coding session on red you introduced.
 
 ---
 
@@ -331,4 +341,5 @@ See `references/anti-patterns.md` for the quick-reference list. Key ones:
 - `user-pov-sliced-stories` — formats an already-split story as explicit User-invokes / User-uses-result outcomes. `unit-testing` does not own that formatting.
 - `representation-refactor-review` — owns broad representation critique, including ZOM drift. The Eight Virtues vocabulary is shared: `unit-testing` applies it inside the active green cycle; the review skill applies it when review itself is the task.
 - `code-object-naming` — owns focused identifier diagnosis and rename planning. Routine naming improvements inside the green refactor step remain part of `unit-testing`; defer only a deeper naming pass.
+- `atomic-commit` — owns preparation, whole-repository verification, human review, and creation of the local Save Your Game microcommit. `unit-testing` keeps that commit distinct from subsequent shared integration.
 - **Existing tests are contracts:** do not weaken or rewrite existing tests to accept broken behavior unless the user explicitly approves and reviews the shown change.

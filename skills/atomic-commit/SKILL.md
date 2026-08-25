@@ -16,6 +16,7 @@ Atomicity begins when choosing the work, not when staging it. A small-looking co
 - Run all Git and verification commands from the repository root. Establish it with `git rev-parse --show-toplevel`; do not assume the current directory is the root.
 - Every untracked file receives an explicit disposition: add, ignore, or delete. Make evident decisions autonomously; ask the human only when the correct disposition is uncertain.
 - A human reviews the complete proposed commit after verification and before `git commit`.
+- Human review is part of the rapid local microcommit loop, not a reason to enlarge batches or postpone a completed green step. Many human-reviewed commits in a day are entirely consistent with this skill.
 - Use a Conventional Commits message that truthfully describes the whole state.
 
 ## Choose the batch before editing

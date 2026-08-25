@@ -31,6 +31,7 @@
 - Merged all three source skills into ONE `SKILL.md` body (no sibling skills); PLAN.md rule "one concept, one skill."
 - ZOMBIES section is now a first-class section (not buried), matching canonical-tdd priority.
 - Tidy First? is integrated into the cycle diagram and has its own section, with explicit First/After/Later/Never choices.
+- The Industrial Logic Red-Green-Refactor-Integrate loop is expanded operationally as Clean Start → test list → Tidy First? → Red → Green → Refactor → authorized atomic Save Your Game microcommit → separately verified shared integration. Human review participates in the rapid microcommit loop; the local commit and integration are intentionally not conflated.
 - Eight Virtues doctrine matches the review skill: Working is non-negotiable; the other seven are peers in balance.
 - FIRST diagnostic table from `unit_test_engineering` is kept as a quick triage reference within the skill body.
 - `agents/openai.yaml` default_prompt is an ordered operational checklist usable directly by Codex.
