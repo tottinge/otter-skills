@@ -8,6 +8,7 @@ These skills are meant to install cleanly for **Claude**, **Codex**, **Copilot**
 
 | Skill | Purpose |
 |-------|---------|
+| `atomic-commit` | Preserve trustworthy history as complete, green, human-vetted repository states |
 | `story-splitting-for-delivery` | Primary story splitter via **progressive admission** (start closed → admit one case → default reject) |
 | `user-pov-sliced-stories` | Format slices as **User invokes** / **User uses result** (formatter; defers split choice) |
 | `unit-testing` | Microtests + TDD hygiene (FIRST, Canon TDD, ZOMBIES, Tidy First?, virtue-targeted refactor) |
@@ -57,6 +58,7 @@ otter-skills/
   docs/
     PLAN.md               # consolidation / packaging plan
   skills/
+    atomic-commit/
     story-splitting-for-delivery/
     user-pov-sliced-stories/
     unit-testing/

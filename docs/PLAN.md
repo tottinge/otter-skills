@@ -19,6 +19,7 @@ Craft skills are scattered across `~/.agents/skills`, `~/Projects/otter-skill`, 
   LICENSE          # placeholder stub only; final choice after populate
   docs/PLAN.md
   skills/
+    atomic-commit/                    # complete, green, human-vetted repository states
     legacy-code-safety/             # characterize, create seams, and hand safe changes to TDD
     story-splitting-for-delivery/   # was iterative-story-split; dir === name
     user-pov-sliced-stories/
@@ -134,7 +135,7 @@ flowchart LR
 
 - `~/Projects/otter-skills` contains the consolidated skill families plus `legacy-code-safety`, with root README install guidance for Claude/Codex/Copilot/Warp-global paths and `dist/*.skill` packages.
 - **Dir basename === YAML `name` === portable skill id** for every skill.
-- Ship ids: `story-splitting-for-delivery`, `user-pov-sliced-stories`, `unit-testing`, `representation-refactor-review`, `code-object-naming`, `legacy-code-safety`.
+- Ship ids: `atomic-commit`, `story-splitting-for-delivery`, `user-pov-sliced-stories`, `unit-testing`, `representation-refactor-review`, `code-object-naming`, `legacy-code-safety`.
 - **Clear, non-overlapping trigger criteria** in each skill `description` + body (when to use / when not / which sibling owns adjacent work).
 - **Consistent as a unit**: no contradictions across skills; balancing forces/constraints OK if named as tensions (e.g. Brief vs Clear). Shared doctrine aligns (virtues/representation, progressive admission ownership, TDD-as-hygiene).
 - No duplicate competing splitter or dual TDD/unit-test top-level skills.
