@@ -46,6 +46,22 @@ def validate_links(path: Path, failures: list[str]) -> None:
             failures.append(f"{path.relative_to(ROOT)}: broken relative link {target!r}")
 
 
+def manifest_versions(
+    codex_plugin: dict,
+    claude_plugin: dict,
+    claude_market: dict,
+    copilot_market: dict,
+) -> list[object]:
+    return [
+        codex_plugin.get("version"),
+        claude_plugin.get("version"),
+        claude_market.get("metadata", {}).get("version"),
+        copilot_market.get("metadata", {}).get("version"),
+        claude_market.get("plugins", [{}])[0].get("version"),
+        copilot_market.get("plugins", [{}])[0].get("version"),
+    ]
+
+
 def main() -> int:
     failures: list[str] = []
     skill_dirs = sorted(path for path in SKILLS.iterdir() if path.is_dir())
@@ -76,12 +92,7 @@ def main() -> int:
     claude_market = load_json(ROOT / ".claude-plugin" / "marketplace.json", failures)
     copilot_market = load_json(ROOT / ".github" / "plugin" / "marketplace.json", failures)
 
-    versions = [
-        codex_plugin.get("version"),
-        claude_plugin.get("version"),
-        claude_market.get("metadata", {}).get("version"),
-        copilot_market.get("metadata", {}).get("version"),
-    ]
+    versions = manifest_versions(codex_plugin, claude_plugin, claude_market, copilot_market)
     if len(set(versions)) > 1:
         failures.append(f"manifest versions disagree: {versions}")
 
