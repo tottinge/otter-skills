@@ -1,6 +1,6 @@
 {
   "name": "otter-skills",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Portable software-craft skills for thin delivery, TDD, safe change, naming, refactoring, and trustworthy commits.",
   "author": { "name": "Tim Ottinger" },
   "repository": "https://github.com/tottinge/otter-skills",

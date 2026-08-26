@@ -211,6 +211,42 @@ Rules of thumb:
 - Microtests do not replace component, contract, story/BDD, E2E, or human checks. They make those affordable by keeping units honest.
 - **High-fidelity rule:** production code must not branch on "am I being tested?"
 
+### Make Isolated and Repeatable observable
+
+FIRST is an acceptance criterion, not merely a description. Before accepting a
+new or changed test as green, inspect every input that can affect its assertion:
+time and timezone, randomness, threads and scheduling, iteration order, process
+environment, locale, shared mutable state, files, ports, databases, networks,
+credentials, permissions, and pre-existing records. The test must control each
+relevant input or provide an isolated, test-specific environment that does.
+
+Use evidence proportional to the risk:
+
+- Run the new test alone and in its containing suite.
+- When the runner supports it, vary test order to expose contamination and
+  retain the reported seed so a failure can be reproduced. Ordering tests to
+  hide contamination is not a repair.
+- For a concurrency, timing, order-dependence, or prior-flake repair, repeat the
+  focused test enough to investigate likely intermittency. Repetition supplies
+  evidence; it does not prove that no flake remains and must never become
+  rerun-until-green acceptance.
+
+Whatever a test requires, it provides. Prefer fresh fixtures and unique,
+test-owned resources. For higher-level tests that need real infrastructure,
+provision known configuration and curated data in a pristine or otherwise
+isolated environment; do not share mutable services with people or unrelated
+test runs.
+
+Assert only the behavior that matters. Do not depend on incidental order from
+unordered collections, queries, messages, or concurrent completion: either make
+ordering part of the production contract or compare without regard to order.
+Prefer explicit deterministic inputs; when randomness is itself relevant, use
+a reproducible seed and report it on failure. Use one injected clock reading for
+one logical operation and deliberately cover relevant calendar, timezone, DST,
+and expiry boundaries. Synchronize on observable events, conditions, futures,
+or barriers rather than guessed delays; assert elapsed time only when timing is
+the behavior under test.
+
 ### Outside-in option
 
 A failing higher-level example/story test may hang red while you drive the interior with microtests. Still do not bulk-write production code without microtest guidance for decisions and transformations.
@@ -286,6 +322,14 @@ Defect cost tracks how long bugs sit undetected. Slow suites make people run tes
 | Unclear failure signal | SelfVerifying | Missing/weak assertions, log-inspection reliance |
 
 Repair approaches: inject clock abstractions; seed RNG; use synchronization primitives (remove `sleep()`); reset state in setup/teardown; eliminate globals; replace real services with in-memory fakes or doubles.
+
+Do not assume the test is defective. A consistent test can reveal intermittent
+production behavior such as races, lost updates, nondeterministic ordering,
+overflow, clock-boundary defects, or latency sensitivity. Reproduce while
+varying one relevant dimension at a time (order, seed, load, timezone/locale,
+parallelism, or environment), locate the uncontrolled input, and repair the
+cause. Do not weaken, ignore, quarantine, or rerun past the assertion merely
+because the failure is intermittent.
 
 ---
 

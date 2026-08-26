@@ -10,6 +10,8 @@
 - Huge uncommitted WIP — cannot retreat cheaply
 - Mixing unrelated changes in one commit
 - Ignoring failures / rerunning until flake passes
+- Configuring automatic reruns as a substitute for diagnosing a flake
+- Quarantining or ignoring a flaky test without an owner and repair path
 - Treating CI as a substitute for local continuous testing
 - Using bare `fail()` or compile errors as the intended red without asserting behavior
 
@@ -19,6 +21,9 @@
 - One test asserting many unrelated behaviors (god test)
 - Shared mutable fixtures that leak across tests
 - Real time, network, DB, filesystem, or sleep in microtests
+- Depending on incidental order from an unordered or concurrently-produced result
+- Sharing mutable environments, records, ports, credentials, or services across test runs
+- Ordering tests alphabetically or otherwise to conceal cross-contamination
 - Over-specified snapshots of entire HTML/JSON/DOM when one fact matters
 - Assertions that only check `true`/`false` without useful expected/actual output
 - Production code that detects test mode (high-fidelity violation)

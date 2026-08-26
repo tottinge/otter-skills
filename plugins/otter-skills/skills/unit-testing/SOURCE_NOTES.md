@@ -9,12 +9,14 @@
 4. `vendor-sources/tdd/references/anti-patterns.md` — TDD anti-patterns quick list
 5. `vendor-sources/tdd-skill/SKILL.md` — near-identical to `vendor-sources/tdd/SKILL.md` (same content; tdd-skill is an older copy)
 6. `vendor-sources/unit_test_engineering/SKILL.md` — FIRST diagnostics, flaky-test triage, test design guidelines
+7. Tim Ottinger, ["Why Are My Tests Flakey?"](https://www.industriallogic.com/blog/why-are-my-tests-flakey/) — over-specification, cross-contamination, global state, unreliable inputs and environments, date/time errors, and intermittent production behavior; vendored at `vendor-sources/tdd-skill/sources/why-are-my-tests-flakey.md`
 
 ## What was taken
 
 - **From canonical-tdd:** Phase 2 (Tidy First? / First-After-Later-Never), Phase 3 (ZOMBIES ordering + one-test-at-a-time canon), Phase 4 (Eight Virtues refactor target with full virtue definitions and LSP/ast-grep tool preference). These are the core TDD/microtest/tidy/ZOMBIES/virtue-refactor sections per PLAN.md instructions.
 - **From tdd:** Clean Start preconditions, red-green-refactor-integrate cycle, FIRST microtest table, structure-shy / LoD guidance, high-fidelity rule, affordable feedback section, cargo-cult avoidance table, session algorithm, graceful retreat / Save Your Game discipline.
 - **From unit_test_engineering:** FIRST violation diagnostic table (symptom → violation → root causes → repair), flaky-test repair approaches, test design anti-patterns (god test, shared fixture mutation, sleep-based sync), "one behavior per test" rule.
+- **From "Why Are My Tests Flakey?":** operational evidence for Isolated and Repeatable tests; order randomization as a diagnostic rather than a repair; controlled, test-specific environments; unordered-result handling; calendar-boundary and synchronization guidance; and the distinction between a flaky test and a reliable test exposing flaky production code.
 - **From tdd/references/anti-patterns.md:** supplemented and deduplicated into `references/anti-patterns.md`.
 
 ## What was dropped
