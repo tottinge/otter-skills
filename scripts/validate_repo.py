@@ -46,20 +46,45 @@ def validate_links(path: Path, failures: list[str]) -> None:
             failures.append(f"{path.relative_to(ROOT)}: broken relative link {target!r}")
 
 
-def manifest_versions(
+def marketplace_plugin(document: dict, label: str, failures: list[str]) -> dict:
+    plugins = document.get("plugins")
+    if not isinstance(plugins, list) or not plugins or not isinstance(plugins[0], dict):
+        failures.append(f"{label} marketplace has no plugin entry")
+        return {}
+    return plugins[0]
+
+
+def validate_manifests(
     codex_plugin: dict,
     claude_plugin: dict,
+    codex_market: dict,
     claude_market: dict,
     copilot_market: dict,
-) -> list[object]:
-    return [
+) -> list[str]:
+    failures: list[str] = []
+    codex_entry = marketplace_plugin(codex_market, "Codex", failures)
+    claude_entry = marketplace_plugin(claude_market, "Claude", failures)
+    copilot_entry = marketplace_plugin(copilot_market, "Copilot", failures)
+
+    versions = [
         codex_plugin.get("version"),
         claude_plugin.get("version"),
         claude_market.get("metadata", {}).get("version"),
         copilot_market.get("metadata", {}).get("version"),
-        claude_market.get("plugins", [{}])[0].get("version"),
-        copilot_market.get("plugins", [{}])[0].get("version"),
+        claude_entry.get("version"),
+        copilot_entry.get("version"),
     ]
+    if len(set(versions)) > 1:
+        failures.append(f"manifest versions disagree: {versions}")
+
+    codex_source = codex_entry.get("source", {}).get("path")
+    if codex_source != "./plugins/otter-skills":
+        failures.append("Codex marketplace does not target the canonical plugin")
+    for label, entry in (("Claude", claude_entry), ("Copilot", copilot_entry)):
+        if entry.get("source") != "./plugins/otter-skills":
+            failures.append(f"{label} marketplace does not target the canonical plugin")
+
+    return failures
 
 
 def main() -> int:
@@ -92,17 +117,15 @@ def main() -> int:
     claude_market = load_json(ROOT / ".claude-plugin" / "marketplace.json", failures)
     copilot_market = load_json(ROOT / ".github" / "plugin" / "marketplace.json", failures)
 
-    versions = manifest_versions(codex_plugin, claude_plugin, claude_market, copilot_market)
-    if len(set(versions)) > 1:
-        failures.append(f"manifest versions disagree: {versions}")
-
-    codex_source = codex_market.get("plugins", [{}])[0].get("source", {}).get("path")
-    if codex_source != "./plugins/otter-skills":
-        failures.append("Codex marketplace does not target the canonical plugin")
-    for label, document in (("Claude", claude_market), ("Copilot", copilot_market)):
-        source = document.get("plugins", [{}])[0].get("source")
-        if source != "./plugins/otter-skills":
-            failures.append(f"{label} marketplace does not target the canonical plugin")
+    failures.extend(
+        validate_manifests(
+            codex_plugin,
+            claude_plugin,
+            codex_market,
+            claude_market,
+            copilot_market,
+        )
+    )
 
     if failures:
         print("Repository validation failed:", file=sys.stderr)

@@ -10,32 +10,58 @@ assert SPEC.loader is not None
 SPEC.loader.exec_module(validate_repo)
 
 
-class ManifestVersionsTest(unittest.TestCase):
-    def test_includes_marketplace_plugin_entry_versions(self):
-        versions = validate_repo.manifest_versions(
-            {"version": "codex-plugin"},
-            {"version": "claude-plugin"},
-            {
-                "metadata": {"version": "claude-marketplace"},
-                "plugins": [{"version": "claude-entry"}],
-            },
-            {
-                "metadata": {"version": "copilot-marketplace"},
-                "plugins": [{"version": "copilot-entry"}],
-            },
+def matching_manifests():
+    return {
+        "codex_plugin": {"version": "1.2.3"},
+        "claude_plugin": {"version": "1.2.3"},
+        "codex_market": {
+            "plugins": [{"source": {"path": "./plugins/otter-skills"}}]
+        },
+        "claude_market": {
+            "metadata": {"version": "1.2.3"},
+            "plugins": [
+                {
+                    "source": "./plugins/otter-skills",
+                    "version": "1.2.3",
+                }
+            ],
+        },
+        "copilot_market": {
+            "metadata": {"version": "1.2.3"},
+            "plugins": [
+                {
+                    "source": "./plugins/otter-skills",
+                    "version": "1.2.3",
+                }
+            ],
+        },
+    }
+
+
+class ManifestValidationTest(unittest.TestCase):
+    def test_matching_versions_and_sources_are_valid(self):
+        failures = validate_repo.validate_manifests(**matching_manifests())
+
+        self.assertEqual(failures, [])
+
+    def test_nested_marketplace_version_disagreement_is_invalid(self):
+        manifests = matching_manifests()
+        manifests["claude_market"]["plugins"][0]["version"] = "different"
+
+        failures = validate_repo.validate_manifests(**manifests)
+
+        self.assertTrue(
+            any("manifest versions disagree" in failure for failure in failures),
+            failures,
         )
 
-        self.assertEqual(
-            versions,
-            [
-                "codex-plugin",
-                "claude-plugin",
-                "claude-marketplace",
-                "copilot-marketplace",
-                "claude-entry",
-                "copilot-entry",
-            ],
-        )
+    def test_empty_plugin_collection_is_reported(self):
+        manifests = matching_manifests()
+        manifests["claude_market"]["plugins"] = []
+
+        failures = validate_repo.validate_manifests(**manifests)
+
+        self.assertIn("Claude marketplace has no plugin entry", failures)
 
 
 if __name__ == "__main__":
