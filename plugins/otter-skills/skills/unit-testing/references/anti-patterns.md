@@ -18,6 +18,8 @@
 ## Test design
 
 - Tests coupled to private structure, call graphs, or train-wreck navigation (`a.b.c.d`)
+- Editing existing tests alongside routine production edits merely to preserve green
+- Treating widespread test maintenance after a behavior-preserving refactor as normal
 - One test asserting many unrelated behaviors (god test)
 - Shared mutable fixtures that leak across tests
 - Real time, network, DB, filesystem, or sleep in microtests

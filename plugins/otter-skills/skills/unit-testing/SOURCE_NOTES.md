@@ -17,6 +17,7 @@
 - **From tdd:** Clean Start preconditions, red-green-refactor-integrate cycle, FIRST microtest table, structure-shy / LoD guidance, high-fidelity rule, affordable feedback section, cargo-cult avoidance table, session algorithm, graceful retreat / Save Your Game discipline.
 - **From unit_test_engineering:** FIRST violation diagnostic table (symptom → violation → root causes → repair), flaky-test repair approaches, test design anti-patterns (god test, shared fixture mutation, sleep-based sync), "one behavior per test" rule.
 - **From "Why Are My Tests Flakey?":** operational evidence for Isolated and Repeatable tests; order randomization as a diagnostic rather than a repair; controlled, test-specific environments; unordered-result handling; calendar-boundary and synchronization guidance; and the distinction between a flaky test and a reliable test exposing flaky production code.
+- **Resilience interpretation:** frequent edits to existing tests during behavior-preserving production work are treated as evidence of over-specification or structural coupling. The skill requires classifying a break as an intentional contract change, production regression, brittle test, or unresolved cause before editing the test.
 - **From tdd/references/anti-patterns.md:** supplemented and deduplicated into `references/anti-patterns.md`.
 
 ## What was dropped

@@ -263,6 +263,28 @@ Bad tests block the purpose of TDD.
 - Assert observable results and meaningful outcomes, not incidental private structure.
 - Prefer scenario-oriented organization (shared arrange = shared situation) over rigid "one test class per production class" when clarity suffers.
 
+**Resilient under routine change**
+
+Existing tests should normally survive implementation edits and refactorings
+that preserve observable behavior. Do not mechanically edit tests to mirror each
+production edit or merely restore green. When an existing test breaks, classify
+the reason before changing either side:
+
+- The observable behavior or contract intentionally changed: update or replace
+  the test deliberately so it states the new behavior.
+- Production behavior regressed: repair the production code.
+- Only implementation structure, incidental formatting or ordering,
+  collaborator calls, snapshots, or fixture details changed: repair the
+  over-specified test so it observes the meaningful outcome instead.
+- The reason is unclear: investigate before editing both test and production
+  code; making both agree can conceal the defect.
+
+If routine work requires edits to several existing tests, stop treating those
+edits as maintenance. This is evidence of shared structural coupling or
+over-specification. Locate and remove that source of maintenance pressure before
+continuing. Adding a test for genuinely new behavior is expected; repeatedly
+rewriting existing tests to track code movement is not.
+
 **Structure-shy (Law of Demeter / "one dot")**
 
 - Do not reach through deep graphs in tests or production (`a.b.c.d`).
@@ -356,7 +378,7 @@ because the failure is intermittent.
 4. **Pick one** behavior; optionally draft the commit message (intentional commit).
 5. **Red** — write the next test at the chosen level (normally a FIRST microtest); confirm its failure reason is correct.
 6. **Green** — minimal code; run tests (full fast suite or project norm).
-7. **Refactor** — tidy prod + tests toward named virtues; run tests again.
+7. **Refactor** — tidy prod + tests toward named virtues; run tests again. If behavior-preserving production edits break existing tests, classify the cause and remove over-specification rather than synchronizing tests mechanically.
 8. **Atomic microcommit / Save Your Game** — when authorized, use `atomic-commit` to review and preserve the complete green state; otherwise report the green diff.
 9. **Integrate** — when authorized, incorporate shared changes, verify the combined state, and publish; do not conflate this with the local commit.
 10. If stuck more than one small step of confusion → **retreat** to the last green saved state and choose a smaller behavior.
@@ -370,7 +392,7 @@ See `references/anti-patterns.md` for the quick-reference list. Key ones:
 
 **Process:** production code before a failing test; big-bang implementation then tests; skipping refactor; batching tests before implementing any; leaving suite red while starting another concern; huge uncommitted WIP; normalizing "rerun until green."
 
-**Test design:** tests coupled to private structure or deep-graph navigation; one test asserting many unrelated behaviors; shared mutable fixtures leaking across tests; real time/network/DB/filesystem/sleep in microtests; production code that detects test mode; test names that restate technical methods instead of domain situations.
+**Test design:** tests coupled to private structure or deep-graph navigation; routinely editing existing tests to mirror production changes; one test asserting many unrelated behaviors; shared mutable fixtures leaking across tests; real time/network/DB/filesystem/sleep in microtests; production code that detects test mode; test names that restate technical methods instead of domain situations.
 
 **Refactor:** vague "cleanup" without targeting a named virtue; hand-editing renames across many files when LSP/`ast-grep` can do it exactly; pursuing Brief at the cost of Clear or Working.
 
