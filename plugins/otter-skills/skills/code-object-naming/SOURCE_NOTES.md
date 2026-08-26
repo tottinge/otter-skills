@@ -50,12 +50,12 @@ Source: `vendor-sources/naming_shortguide/` (manuscript MD chapters)
    because it is the most concise heuristic for intent vs. composition.
 5. **Cross-link to representation-refactor-review** rather than duplicating Eight Virtues content.
 
-## Open questions for lead integrator
-1. `the_point.md` appears to have a duplicate section beginning around line 175 with `{sample: true}`
-   markers and `￼` glyph prefixes — looks like a manuscript layout artifact. If the shortguide is
-   published, that section should be cleaned up before source sharing.
-2. Should the Benner book (`Naming Things`, LeanPub 2025) be listed in a top-level references/
-   SOURCES.md for the whole otter-skills repo, or kept per-skill? Currently only mentioned in
-   SOURCE_NOTES.
-3. The `conclusion.md` file was short and contained no new operationalizable guidance. Confirm
-   this is expected or share the full text if it was truncated.
+## Deferred publication consideration
+
+If the manuscript sources themselves are prepared for publication, clean the
+known layout artifacts in `the_point.md` and confirm that `conclusion.md` is
+complete. That source-publication work is outside this packaged skill.
+
+The Benner book (`Naming Things`, LeanPub 2025) remains a skill-local source
+note. A repository-wide bibliography is unnecessary unless more skills begin to
+share that source.

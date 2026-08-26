@@ -40,7 +40,7 @@
 - `agents/openai.yaml` default_prompt is an ordered operational checklist usable directly by Codex.
 - `references/anti-patterns.md` is lean; points back from SKILL.md with one line rather than duplicating all items.
 
-## Open questions for lead integrator
+## Deferred evaluations and design options (not release blockers)
 
 1. **Eight Virtues canonical source** — the virtue definitions come from canonical-tdd-skill.md (Ottinger & Langr); if a dedicated shared reference is later useful, both `unit-testing` and `representation-refactor-review` could link to it rather than duplicate it.
-3. **Warp-agent description trigger wording** — the current `description:` frontmatter uses a concise capability boundary. Validate it against real routing prompts before expanding it.
+2. **Description trigger wording** — the current `description:` frontmatter uses a concise capability boundary. Validate it against real routing prompts before expanding it.

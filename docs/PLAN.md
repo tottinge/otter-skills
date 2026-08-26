@@ -1,6 +1,11 @@
 # otter-skills: consolidation and packaging record
 
-> Historical planning record. Consolidation is complete; the canonical, installable tree is now `plugins/otter-skills/skills/`. See [Installation](INSTALL.md) for current paths and commands.
+> Historical planning record. Consolidation is complete; the canonical,
+> installable tree is now `plugins/otter-skills/skills/`. Statements below about
+> pending licenses, publishing, optional later work, and success criteria record
+> the original plan; they are not the current backlog. See
+> [Installation](INSTALL.md) for current paths and commands and skill-local
+> `SOURCE_NOTES.md` files for explicitly deferred considerations.
 
 ## Problem
 

@@ -41,8 +41,13 @@ Covers both skills in this family:
 - Progressive admission is the **only** primary workflow in `story-splitting-for-delivery`. SPIDR and other pattern menus are demoted to vocabulary in `references/source-map.md`, used only to name the next admission boundary when it is unclear.
 - `user-pov-sliced-stories` sets `allow_implicit_invocation: false` in its Codex config — it should only trigger when the user explicitly wants user-POV formatting, not when they ask for a split.
 - Family framing: **story-splitting-for-delivery** (progressive admission for delivery-ready thin vertical slices), not generic story writing.
+- The canonical installable copies are the skill directories in this repository. Older user-level Warp copies are source history and may be replaced manually using the root installation guidance.
 
-## Open questions for lead integrator
-- Should `user-pov-sliced-stories` ever trigger implicitly? Currently set to `false`; review if the eval shows it should activate for "how do we describe these slices?" prompts.
-- The source links from the old listicle are available but not included. Worth adding a condensed bibliography to `references/source-map.md` if users frequently need to cite outside authors?
-- Both skills' `SKILL.md` descriptions are already present in the Warp skills list (`~/.agents/skills`). Install instructions in root README should note that the `skills/` tree in this repo replaces those originals.
+## Deferred evaluations (not release blockers)
+
+- Keep `user-pov-sliced-stories` explicit-only unless routing evaluations show
+  that prompts such as “how do we describe these slices?” reliably intend that
+  formatter rather than the primary splitter.
+- Add a condensed bibliography from the old listicle to
+  `references/source-map.md` only if users demonstrate a recurring need to cite
+  those outside authors.
