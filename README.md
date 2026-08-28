@@ -18,6 +18,18 @@ The repository is both a plugin marketplace and a directly installable Agent Ski
 
 The canonical skill trees live in [`plugins/otter-skills/skills/`](plugins/otter-skills/skills/). Each directory basename matches its `SKILL.md` frontmatter `name`.
 
+## Host compatibility
+
+The plugin keeps one canonical `skills/` tree and exposes host-specific discovery metadata around it:
+
+| Host | Plugin manifest | Marketplace manifest |
+| --- | --- | --- |
+| Codex | `plugins/otter-skills/.codex-plugin/plugin.json` | `.agents/plugins/marketplace.json` |
+| Claude Code | `plugins/otter-skills/.claude-plugin/plugin.json` | `.claude-plugin/marketplace.json` |
+| GitHub Copilot CLI | `plugins/otter-skills/.github/plugin/plugin.json` | `.github/plugin/marketplace.json` |
+
+Keeping the skills canonical avoids copies drifting between hosts. Each manifest points its host to the same `plugins/otter-skills/skills/` directories.
+
 ## Install
 
 Install the complete collection as a plugin, or install/copy individual skill directories. See [Installation](docs/INSTALL.md) for Codex, Claude Code, Copilot CLI, project-local, and manual instructions.
@@ -32,6 +44,7 @@ otter-skills/
   plugins/otter-skills/
     .codex-plugin/plugin.json
     .claude-plugin/plugin.json
+    .github/plugin/plugin.json
     skills/<skill-name>/SKILL.md
   scripts/
     package_skills.py

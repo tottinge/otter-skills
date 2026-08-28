@@ -57,6 +57,7 @@ def marketplace_plugin(document: dict, label: str, failures: list[str]) -> dict:
 def validate_manifests(
     codex_plugin: dict,
     claude_plugin: dict,
+    copilot_plugin: dict,
     codex_market: dict,
     claude_market: dict,
     copilot_market: dict,
@@ -69,6 +70,7 @@ def validate_manifests(
     versions = [
         codex_plugin.get("version"),
         claude_plugin.get("version"),
+        copilot_plugin.get("version"),
         claude_market.get("metadata", {}).get("version"),
         copilot_market.get("metadata", {}).get("version"),
         claude_entry.get("version"),
@@ -113,6 +115,7 @@ def main() -> int:
 
     codex_plugin = load_json(PLUGIN / ".codex-plugin" / "plugin.json", failures)
     claude_plugin = load_json(PLUGIN / ".claude-plugin" / "plugin.json", failures)
+    copilot_plugin = load_json(PLUGIN / ".github" / "plugin" / "plugin.json", failures)
     codex_market = load_json(ROOT / ".agents" / "plugins" / "marketplace.json", failures)
     claude_market = load_json(ROOT / ".claude-plugin" / "marketplace.json", failures)
     copilot_market = load_json(ROOT / ".github" / "plugin" / "marketplace.json", failures)
@@ -121,6 +124,7 @@ def main() -> int:
         validate_manifests(
             codex_plugin,
             claude_plugin,
+            copilot_plugin,
             codex_market,
             claude_market,
             copilot_market,

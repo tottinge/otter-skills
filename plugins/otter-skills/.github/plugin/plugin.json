@@ -6,5 +6,6 @@
   "homepage": "https://github.com/tottinge/otter-skills",
   "repository": "https://github.com/tottinge/otter-skills",
   "license": "Apache-2.0",
-  "keywords": ["software-craft", "tdd", "refactoring", "story-splitting"]
+  "keywords": ["software-craft", "tdd", "refactoring", "story-splitting"],
+  "skills": "skills/"
 }

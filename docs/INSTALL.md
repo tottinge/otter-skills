@@ -34,6 +34,8 @@ For one skill, copy or link its directory into `~/.claude/skills/`. For a projec
 
 ## GitHub Copilot CLI
 
+The plugin includes an explicit Copilot manifest at `plugins/otter-skills/.github/plugin/plugin.json`; it does not depend on Copilot's Claude-manifest fallback.
+
 From Copilot CLI:
 
 ```text
