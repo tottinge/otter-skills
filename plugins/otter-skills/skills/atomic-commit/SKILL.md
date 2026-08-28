@@ -12,6 +12,7 @@ Atomicity begins when choosing the work, not when staging it. A small-looking co
 ## Non-negotiable invariants
 
 - Green before every commit is absolute. Never create a failing, WIP, checkpoint, or “fixed by the next commit” commit.
+- Incremental refactoring, tests, prescribed scans, and documentation are pre-commit work. Complete and verify them before presenting the feature commit for review.
 - Commit the entire working-directory state. Never use partial staging, path-limited staging, `git add -p`, or temporary reversal to manufacture commit boundaries.
 - Run all Git and verification commands from the repository root. Establish it with `git rev-parse --show-toplevel`; do not assume the current directory is the root.
 - Every untracked file receives an explicit disposition: add, ignore, or delete. Make evident decisions autonomously; ask the human only when the correct disposition is uncertain.
@@ -25,11 +26,13 @@ Begin from a clean, green repository. If it is dirty, do not add another intenti
 
 Choose one meaningful, bounded change and state its intention. Then perform only that batch. Keep the batch small enough to understand, test, and review as a whole.
 
+A feature batch is coherent when it contains everything needed to leave that feature complete and trustworthy: its behavior change, incremental refactoring, tests, prescribed scans, and relevant documentation. These are supporting parts of one atomic feature commit, not separate intentions that must be split into preparatory or follow-up commits.
+
 If several logical changes nevertheless accumulate, acknowledge the broader batch and commit the complete state together. Do not split, selectively stage, or reconstruct it into cleaner-looking commits: those synthetic snapshots were not the states tested on disk. Describe the combined state honestly and improve batch discipline on the next change.
 
 ## Recognize the commit point
 
-Completion of a demonstrable implementation slice, iteration, or story triggers the complete-state commit protocol. Demonstrable means the resulting behavior can be shown or verified as an end-to-end outcome, not merely that an internal task list is exhausted. Do not begin the next slice while the completed one remains uncommitted.
+Completion of a demonstrable implementation slice, iteration, or story triggers the complete-state commit protocol only after its incremental refactoring, tests, prescribed scans, and documentation updates are complete. Demonstrable means the resulting behavior can be shown or verified as an end-to-end outcome, not merely that an internal task list is exhausted. Do not begin the next slice while the completed one remains uncommitted.
 
 Treat refactoring as a series of small experiments. After each refactoring run, execute the prescribed tests and return the whole repository to green before proceeding. Then show the human the result and ask whether the representation is sufficient or whether another refactoring run is warranted. The human decides when the refactoring is enough; the agent must not silently extend the series or declare completion on its own. When the human says it is enough, enter the complete-state commit protocol for the whole current state.
 
@@ -44,7 +47,7 @@ Perform the protocol from the repository root.
 3. Inspect each file and decide: **add**, **ignore**, or **delete**. Ask only about genuinely uncertain cases.
 4. Apply every delete and `.gitignore` decision. Use safe, recoverable deletion where available and do not delete uncertain files.
 5. Inspect the complete working tree with `git status --short` and the relevant full diffs.
-6. Run the repository's complete prescribed test and verification suite against this resulting state. Every check must be green. If verification cannot complete or any check fails, do not commit.
+6. Run the repository's complete prescribed test, scan, and verification suite against this resulting state. Every check must be green. If verification cannot complete or any check fails, do not commit.
 7. Re-list untracked files and inspect the complete status after verification. Tests and formatters sometimes create or modify files. Classify anything new; if cleanup or another action changes the repository state, repeat verification and this check until the green state is stable.
 8. Run `git add .` from the repository root, exactly—not from a subdirectory and not with narrower path arguments.
 9. Inspect `git status --short` and the complete staged diff (`git diff --cached`). Confirm that the staged snapshot contains the entire intended working state and no unexplained file.
