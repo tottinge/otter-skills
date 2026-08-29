@@ -1,6 +1,6 @@
 ---
 name: representation-refactor-review
-description: Review code and propose evidence-based representation improvements using Tim Ottinger's Eight Code Virtues, SPOT, ZOM, and the improvement test. Use for broad craft, refactoring-readiness, clean-code, or knowledge-representation critique, including an Ottinger-style review. Do not use for bug/security-only review, implementing behavior test-first, or a focused identifier-naming task; those belong to the relevant specialist workflow.
+description: Review code and propose evidence-based representation improvements using Tim Ottinger's Eight Code Virtues, SPOT, ZOM, and the improvement test. Use for broad craft, refactoring-readiness, clean-code, knowledge-representation critique, or discovering data clusters, data classes, and class-splitting boundaries. Do not use for bug/security-only review, implementing behavior test-first, or a focused identifier-naming task; those belong to the relevant specialist workflow.
 ---
 
 # Ottinger-Style Code Review: Representation & Refactor
@@ -29,6 +29,7 @@ A broad representation review may still surface naming and test-design evidence.
 | --- | --- |
 | This file | Always when the skill is active |
 | [`references/virtues.md`](references/virtues.md) | Before writing findings — definitions, improvement test, Coherent, comments |
+| [`references/class-boundaries.md`](references/class-boundaries.md) | When data clusters, construction semantics, extracting a class/value object, or splitting a class are in scope |
 
 Keep the workflow here; put depth in the reference. Use the sibling `code-object-naming` skill when a review needs a dedicated naming pass.
 
@@ -109,6 +110,15 @@ Smallest suggested representation improvement:
 ```
 
 Integrate these findings into the main report at the appropriate P-level. ZOM-without-ownership and One-pretending-to-be-Many findings on shared facts are typically P1–P2 (Unique). Missing-type findings are typically P2–P3 (Developed). Dead representation is typically P2 unless it actively misleads (then P1 for Coherent/Unique).
+
+## Minimum evidence for class recommendations
+
+Clumping suggests a boundary; a meaningful name and independent rules confirm it. Do not recommend a class or split from size, field count, method count, or clumping alone.
+
+- **Introduce a class:** values repeatedly travel together **and** share construction rules, invariants, normalization, or behaviour worth owning.
+- **Split a class:** methods and fields form at least two distinct clusters; each cluster names a meaningful concept; and their necessary interaction fits through a small interface.
+
+When either recommendation is plausible, read [`references/class-boundaries.md`](references/class-boundaries.md) before reporting or changing code. Record evidence against the recommendation as well as evidence for it.
 
 ## How to be exacting
 
