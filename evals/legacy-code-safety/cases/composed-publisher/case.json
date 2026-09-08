@@ -1,0 +1,12 @@
+{
+  "id": "composed-publisher",
+  "language": "javascript",
+  "expected_classification_phase1": "COMPOSED",
+  "expected_classification_final": "COMPOSED",
+  "required_context": ["store.js", "bus.js"],
+  "test_command": ["node", "--test"],
+  "immutable_phase1": ["publisher.js", "store.js", "bus.js"],
+  "immutable_final": ["publisher.js", "store.js", "bus.js"],
+  "mutations": [],
+  "requires_approval": false
+}

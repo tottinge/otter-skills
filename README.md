@@ -55,6 +55,29 @@ otter-skills/
 
 Run `python3 scripts/validate_repo.py` before publishing. Run `python3 scripts/package_skills.py` to rebuild `dist/`.
 
+## Dogfood evaluations
+
+The `legacy-code-safety` skill has an opt-in behavioral A/B harness with disposable
+Python and Node.js fixture repositories. Live trials require an explicit model and
+do not run in CI:
+
+```bash
+python3 evals/legacy-code-safety/dogfood.py run --model MODEL --mode smoke
+python3 evals/legacy-code-safety/dogfood.py run --model MODEL --mode release
+```
+
+Smoke mode runs each control/treatment arm once; release mode runs each arm three
+times. The command prints an ignored result directory containing transcripts,
+diffs, deterministic scores, and `review.json`. Complete that human-review file,
+then finalize the run:
+
+```bash
+python3 evals/legacy-code-safety/dogfood.py finalize RUN_DIR --review RUN_DIR/review.json
+```
+
+Any critical treatment safety failure blocks the run. Control failures remain in
+the report as comparative evidence.
+
 ## License
 
 Licensed under Apache-2.0 for commercial and open-source use. See [LICENSE](LICENSE). The [NOTICE](NOTICE) file preserves credit for the writers and practitioners whose published work materially informed these skills; more specific source notes remain beside the relevant skills.

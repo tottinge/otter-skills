@@ -1,0 +1,14 @@
+{
+  "id": "breaking-timeout",
+  "language": "python",
+  "expected_classification_phase1": "GAPS",
+  "expected_classification_final": "READY",
+  "required_context": ["scheduler.py", "test_scheduler.py"],
+  "test_command": ["python3", "-m", "unittest", "discover", "-s", "tests"],
+  "immutable_phase1": ["timeouts.py", "scheduler.py"],
+  "immutable_final": [],
+  "mutations": [
+    {"path": "timeouts.py", "append": "def parse_timeout(raw_value):\n    return 0 if not raw_value.strip() else int(raw_value)"}
+  ],
+  "requires_approval": true
+}

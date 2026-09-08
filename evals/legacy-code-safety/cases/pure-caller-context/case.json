@@ -1,0 +1,14 @@
+{
+  "id": "pure-caller-context",
+  "language": "python",
+  "expected_classification_phase1": "GAPS",
+  "expected_classification_final": "READY",
+  "required_context": ["invoice.py", "badge.py"],
+  "test_command": ["python3", "-m", "unittest", "discover", "-s", "tests"],
+  "immutable_phase1": [],
+  "immutable_final": [],
+  "mutations": [
+    {"path": "customer_name.py", "append": "def customer_name(first_name, last_name):\n    return \"Visitor\""}
+  ],
+  "requires_approval": false
+}
