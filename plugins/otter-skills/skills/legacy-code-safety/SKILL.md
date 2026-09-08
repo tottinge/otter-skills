@@ -1,11 +1,12 @@
 ---
 name: legacy-code-safety
 description: >
-  Establish trustworthy feedback around poorly understood or weakly tested
-  existing code before changing it. Use for characterization or approval tests,
-  test-harness access, seams, sensing and separation, dependency breaking, and
-  incremental replacement of risky live code. Once a fast trustworthy boundary
-  exists, use unit-testing to drive the requested new behavior.
+  Find and protect the decisions and transformations in poorly understood or
+  weakly tested existing code before changing behavior. Use for characterization
+  or approval tests, side-effect reconnaissance, test-harness access, seams,
+  sensing and separation, dependency breaking, and incremental replacement of
+  risky live code. Once a fast trustworthy boundary exists, use unit-testing to
+  drive the requested new behavior.
 ---
 
 # Legacy Code Safety
@@ -39,8 +40,10 @@ This skill owns **establishing safety**. `unit-testing` owns specifying and impl
 - Characterization describes observed behavior, not desired behavior.
 - Separate observations, suspected defects, and requested changes.
 - Break only the dependencies that block sensing or separation for this change.
+- Do not manufacture a unit-test target from code that merely composes effectful calls.
 - Production code must not branch on whether it is under test.
 - A test is not a safety net until it has demonstrated that it can fail for a relevant change.
+- Every caller-visible regression within scope must be capable of failing a test somewhere.
 - Prefer small, reversible changes through live code over a parallel rewrite.
 - Preserve unrelated user work. Create commits or external changes only when authorized.
 
@@ -56,6 +59,9 @@ Likely change point:
 Relevant entry-to-exit path:
 Behavior that must remain stable:
 Dangerous or unavailable dependencies:
+Target classification and evidence:
+Caller context and compatibility assumptions:
+Potential breaking changes and approval needed:
 Current feedback and inherited failures:
 ```
 
@@ -63,7 +69,52 @@ Ask three questions throughout: How will we know the requested change is correct
 
 ### 2. Find the narrowest useful test point
 
-Prefer the cheapest boundary that protects the requested change:
+Inspect the target and relevant callees statically before executing or refactoring.
+Trace where the relevant decisions and transformations actually live; the requested
+function may only delegate to a deeper owner.
+
+Look for logic worth protecting:
+
+- branching, policy decisions, validation, and boundary rules
+- calculations and data transformations
+- result, event, request, or command construction
+- error classification, retry decisions, and fallback selection
+
+Then classify the target:
+
+- **READY** — relevant logic already has sensitive tests and effects are contained
+- **GAPS** — a safe boundary exists, but named decisions or transformations lack protection
+- **NEEDS_SEAM** — worthwhile logic is entangled with dangerous effects
+- **COMPOSED** — the function only wires effectful operations together and contains no meaningful decision or transformation
+- **BLOCKED** — reachable effects remain unknown or cannot be contained
+
+Static inspection can identify a probable target, but cannot establish **READY**.
+That requires contained execution and evidence that assertions detect relevant
+behavioral changes. High coverage alone is not sensitivity evidence.
+
+Once the target is isolated, search backward as well as forward. Inspect every
+statically discoverable direct caller and its relevant tests. Inspect farther
+upstream only when a direct caller does not reveal why it calls the target or how it
+uses the result. Caller context supplies the meaning behind the target's mechanics:
+expected input shapes, relied-upon results and errors, mutation or freshness,
+ordering, and other compatibility assumptions. Treat these observable dependencies
+as contract evidence, not as unquestionable intent; do not freeze incidental caller
+mechanics such as local names, unused result details, or private sequencing.
+
+A function that reads only its parameters, performs no mutation or other side
+effects, and returns a fresh value is safe to execute directly. It is **READY** only
+when sensitive tests already protect its meaningful decisions, transformations,
+boundaries, corner cases, and distinct caller assumptions. Otherwise classify it as
+**GAPS** and add focused input/output tests. Synthesize equivalent callers into one
+behavioral case rather than mechanically writing one test per caller.
+
+For **COMPOSED**, do not add indirection merely to obtain unit coverage. Use a
+contained integration or contract test only when the composition itself carries an
+important external guarantee such as ordering, transactionality, or protocol
+compatibility. Otherwise locate and protect the deeper decision owner.
+
+For **GAPS** or **NEEDS_SEAM**, prefer the cheapest boundary that protects the
+requested change:
 
 1. an existing focused public behavior
 2. an existing seam near the change point
@@ -71,7 +122,12 @@ Prefer the cheapest boundary that protects the requested change:
 4. a pinch point through which several relevant effects pass
 5. a minimal new seam
 
-Do not default to a full end-to-end harness or mock every collaborator. Read [references/seams-and-dependencies.md](references/seams-and-dependencies.md) when code cannot run or relevant effects cannot be observed.
+Do not default to a full end-to-end harness or mock every collaborator. Read
+[references/seams-and-dependencies.md](references/seams-and-dependencies.md) when
+code cannot run or relevant effects cannot be observed. Before executing code with
+reachable database, messaging, network, filesystem, subprocess, background-work,
+or global-state behavior, read
+[references/effect-reconnaissance-and-scooping.md](references/effect-reconnaissance-and-scooping.md).
 
 ### 3. Characterize relevant behavior
 
@@ -87,7 +143,27 @@ Demonstrate at least one relevant failure by seeing the initial expectation fail
 
 Restore the baseline immediately after any deliberate perturbation.
 
-### 5. Introduce only necessary seams
+### 5. Guard caller compatibility
+
+If a proposed change may invalidate caller-visible behavior, gather evidence before
+changing production behavior:
+
+1. Name the affected callers and the assumptions at risk.
+2. Add or strengthen tests so the current dependency and proposed incompatibility
+   can cause a meaningful failure.
+3. Add caller-level tests for graceful handling of the proposed result, error, or
+   contract; use the smallest faithful test level that proves the handling.
+4. Report the impact, migration or compatibility options, and unknown callers.
+5. Stop and obtain explicit approval for the contract change and caller adaptations.
+
+An initial request is not approval for newly discovered breakage unless it explicitly
+identifies that break and its affected callers. After approval, adapt callers and the
+target in small test-driven steps. Refuse the production change while material caller
+risk is unknown, affected callers cannot be shown to handle it, or approval is absent.
+The aim is not to forbid intentional contract change; it is to prevent accidental,
+silent, or unreviewed breakage.
+
+### 6. Introduce only necessary seams
 
 For each blocking dependency, identify:
 
@@ -101,7 +177,13 @@ Evidence behavior is preserved:
 
 Keep preparatory edits structural and green. Prefer explicit parameters or small adapters when natural in the codebase, but use language and build-system seams when they are safer than broad redesign.
 
-### 6. Hand new behavior to TDD
+After each extraction, apply the improvement test: meaningful policy or
+transformation remains in the tested unit; its fake is smaller and safer than the
+production dependency; its tests detect relevant changes; and the safety benefit
+justifies the boundary. If extraction leaves a linear mirror of effect calls, revert
+the experiment and classify the target as **COMPOSED**.
+
+### 7. Hand new behavior to TDD
 
 Once the boundary is fast, reliable, and capable of detecting relevant change, use `unit-testing`:
 
@@ -112,13 +194,13 @@ Once the boundary is fast, reliable, and capable of detecting relevant change, u
 
 Do not confuse a characterization expectation with a test-first specification.
 
-### 7. Switch incrementally when the change is large
+### 8. Switch incrementally when the change is large
 
 If the transformation cannot finish in a short safe cycle, keep old and new paths able to coexist, prove compatibility, and move one caller, case, or route at a time. Remove the old path only when evidence shows it is unused.
 
 Read [references/incremental-switchover.md](references/incremental-switchover.md) before a parallel implementation, broad API change, or rewrite proposal.
 
-### 8. Finish with evidence
+### 9. Finish with evidence
 
 Report:
 
@@ -126,12 +208,15 @@ Report:
 Requested change:
 Observed legacy behavior:
 Characterization added:
+Caller assumptions protected:
+Breaking-change approval:
 Seams used or introduced:
 Safety-net failure demonstrated:
 New behavior test and implementation:
 Verification:
 Temporary scaffolding:
 Remaining unprotected risks:
+Final target classification:
 ```
 
 ## Stop and report rather than guess
@@ -143,6 +228,7 @@ Stop or narrow the work when characterization would:
 - approve output nobody has inspected
 - depend on uncontrolled nondeterminism that obscures meaningful changes
 - require a public-contract change beyond the user's authorization
+- leave affected callers unable to handle an approved contract change gracefully
 - discard or overwrite unrelated work to regain a baseline
 
 When a unit remains unreachable, report the smallest seam that would unlock it and the risk of that edit. Do not fabricate confidence.

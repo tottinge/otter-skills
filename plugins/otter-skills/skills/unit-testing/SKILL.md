@@ -38,6 +38,26 @@ TDD is programming hygiene. Its job is not "prove the whole system" or "raise co
 
 ## What requires test evidence
 
+### Understand an existing target before editing
+
+Whenever modifying an existing function, including a behavior-preserving refactor,
+inspect every statically discoverable direct caller and the relevant existing tests
+before the first production edit. Search farther upstream only when direct callers
+do not reveal the target's purpose or how its result is used. Add distinct caller
+assumptions to the test list: expected inputs, results, errors, mutation or freshness,
+ordering, and other observable behavior. Do not turn incidental caller structure
+into contract.
+
+If the proposed edit may invalidate a caller assumption, first add enough target-,
+contract-, integration-, or caller-level evidence to make the incompatibility fail
+meaningfully. Add caller-level tests that specify graceful handling of the proposed
+new behavior. Then show the affected callers, risks, migration or compatibility
+options, and unknown uses, and obtain explicit human approval before making the
+contract-changing production edit. A request does not authorize newly discovered
+breakage unless it explicitly names that break and its affected callers. Refuse to
+proceed while material impact is unknown, caller handling is unproven, or approval
+is absent.
+
 Before changing production behavior, make a short **Beck-style test list** of
 behavioral examples and concerns. This is not a manual test plan or a scripted
 series of human actions and observations. It is a revisable list of tests that
@@ -112,6 +132,7 @@ Work one behavior at a time. Keep cycles short enough that retreat is cheap.
 
 ```text
 clean/green baseline
+  → for an existing function, inspect callers/tests and pass any breaking-change gate
   → update the Beck-style test list; pick ONE next behavior (ZOMBIES order)
   → Tidy First? (First / After / Later / Never)
   → write the next failing test at the chosen level (normally a microtest)
@@ -409,3 +430,5 @@ See `references/anti-patterns.md` for the quick-reference list. Key ones:
 - `code-object-naming` — owns focused identifier diagnosis and rename planning. Routine naming improvements inside the green refactor step remain part of `unit-testing`; defer only a deeper naming pass.
 - `atomic-commit` — owns preparation, whole-repository verification, human review, and creation of the local Save Your Game microcommit. `unit-testing` keeps that commit distinct from subsequent shared integration.
 - **Existing tests are contracts:** do not weaken or rewrite existing tests to accept broken behavior unless the user explicitly approves and reviews the shown change.
+- **Caller dependencies are contract evidence:** protect observable assumptions at the narrowest faithful level, and require informed approval before intentionally breaking them.
+- **No silent regressions:** every caller-visible regression within scope must be capable of failing a target-, contract-, integration-, or caller-level test.

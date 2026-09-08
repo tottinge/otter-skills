@@ -14,7 +14,7 @@ The repository is both a plugin marketplace and a directly installable Agent Ski
 | `unit-testing` | Apply FIRST microtests and the Clean Start → Tidy? → Red → Green → Refactor → Atomic Commit → Integrate loop |
 | `representation-refactor-review` | Review through the Eight Code Virtues, including ZOM representation drift |
 | `code-object-naming` | Improve code-object names using the naming short-guide workflow |
-| `legacy-code-safety` | Characterize behavior, create minimal seams, and change risky existing code safely |
+| `legacy-code-safety` | Find real decisions, contain effects, and prove a sensitive test boundary before risky changes |
 
 The canonical skill trees live in [`plugins/otter-skills/skills/`](plugins/otter-skills/skills/). Each directory basename matches its `SKILL.md` frontmatter `name`.
 
