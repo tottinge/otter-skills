@@ -38,6 +38,7 @@ Install the complete collection as a plugin, or install/copy individual skill di
 
 ```text
 otter-skills/
+  manifest.yaml                           # generated GovKit extension manifest
   .agents/plugins/marketplace.json       # Codex marketplace
   .claude-plugin/marketplace.json        # Claude marketplace
   .github/plugin/marketplace.json        # Copilot marketplace
@@ -48,12 +49,13 @@ otter-skills/
     skills/<skill-name>/SKILL.md
   scripts/
     package_skills.py
+    update_govkit_manifest.py
     validate_repo.py
   dist/                                  # reproducible per-skill archives
   docs/
 ```
 
-Run `python3 scripts/validate_repo.py` before publishing. Run `python3 scripts/package_skills.py` to rebuild `dist/`.
+Run `python3 scripts/update_govkit_manifest.py` after adding or removing a skill, then run `python3 scripts/validate_repo.py` before publishing. The validator rejects a stale GovKit inventory. Run `python3 scripts/package_skills.py` to rebuild `dist/`.
 
 ## Dogfood evaluations
 

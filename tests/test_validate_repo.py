@@ -75,6 +75,16 @@ class ManifestValidationTest(unittest.TestCase):
 
         self.assertIn("Claude marketplace has no plugin entry", failures)
 
+    def test_stale_govkit_manifest_is_reported(self):
+        failures = validate_repo.validate_govkit_manifest(
+            expected="generated manifest\n", actual="stale manifest\n"
+        )
+
+        self.assertEqual(
+            failures,
+            ["manifest.yaml is stale; run python3 scripts/update_govkit_manifest.py"],
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

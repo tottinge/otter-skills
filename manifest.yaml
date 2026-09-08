@@ -1,0 +1,33 @@
+id: otter-skills
+name: Otter Skills
+version: 0.1.7
+description: >-
+  Portable software-craft skills for thin delivery, TDD, safe change, naming,
+  refactoring, and trustworthy commits. Installs into your agent's skills
+  directory as otter-<skill>.
+extension_type: skills
+contract_sets: []
+origin:
+  # govkit rewrites upstream_url and upstream_ref with the actual fetch
+  # source and resolved commit at `extension add --from-git` time; the
+  # values here are documentation for humans reading the repo.
+  upstream_url: https://github.com/tottinge/otter-skills
+  upstream_ref: HEAD
+  upstream_version: 0.1.7
+  license: Apache-2.0
+  license_files: [LICENSE, NOTICE]
+skills:
+  - path: plugins/otter-skills/skills/atomic-commit
+    install_as: otter-atomic-commit
+  - path: plugins/otter-skills/skills/code-object-naming
+    install_as: otter-code-object-naming
+  - path: plugins/otter-skills/skills/legacy-code-safety
+    install_as: otter-legacy-code-safety
+  - path: plugins/otter-skills/skills/representation-refactor-review
+    install_as: otter-representation-refactor-review
+  - path: plugins/otter-skills/skills/story-splitting-for-delivery
+    install_as: otter-story-splitting-for-delivery
+  - path: plugins/otter-skills/skills/unit-testing
+    install_as: otter-unit-testing
+  - path: plugins/otter-skills/skills/user-pov-sliced-stories
+    install_as: otter-user-pov-sliced-stories

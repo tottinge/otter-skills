@@ -8,6 +8,11 @@ import re
 import sys
 from pathlib import Path
 
+try:
+    from scripts.update_govkit_manifest import manifest_for_repository
+except ModuleNotFoundError:
+    from update_govkit_manifest import manifest_for_repository
+
 ROOT = Path(__file__).resolve().parents[1]
 PLUGIN = ROOT / "plugins" / "otter-skills"
 SKILLS = PLUGIN / "skills"
@@ -89,6 +94,12 @@ def validate_manifests(
     return failures
 
 
+def validate_govkit_manifest(expected: str, actual: str) -> list[str]:
+    if actual == expected:
+        return []
+    return ["manifest.yaml is stale; run python3 scripts/update_govkit_manifest.py"]
+
+
 def main() -> int:
     failures: list[str] = []
     skill_dirs = sorted(path for path in SKILLS.iterdir() if path.is_dir())
@@ -130,13 +141,23 @@ def main() -> int:
             copilot_market,
         )
     )
+    try:
+        actual_govkit_manifest = (ROOT / "manifest.yaml").read_text(encoding="utf-8")
+    except OSError as error:
+        failures.append(f"manifest.yaml: {error}")
+    else:
+        failures.extend(
+            validate_govkit_manifest(
+                expected=manifest_for_repository(ROOT), actual=actual_govkit_manifest
+            )
+        )
 
     if failures:
         print("Repository validation failed:", file=sys.stderr)
         for failure in failures:
             print(f"- {failure}", file=sys.stderr)
         return 1
-    print(f"Validated {len(skill_dirs)} skills and all plugin manifests.")
+    print(f"Validated {len(skill_dirs)} skills and all repository manifests.")
     return 0
 
 
