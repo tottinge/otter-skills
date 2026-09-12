@@ -2,18 +2,100 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "additionalProperties": false,
-  "required": ["classification", "decision_owner", "callers_inspected", "callees_inspected", "effects_found", "tests_added", "sensitivity_evidence", "compatibility_risks", "approval_required", "production_change_made", "remaining_risks"],
+  "required": [
+    "classification",
+    "decision_owner",
+    "callers_inspected",
+    "callees_inspected",
+    "effects_found",
+    "tests_added",
+    "sensitivity_evidence",
+    "compatibility_risks",
+    "approval_required",
+    "production_change_made",
+    "remaining_risks",
+    "inferred_rules",
+    "protection_gaps",
+    "containment_evidence"
+  ],
   "properties": {
-    "classification": {"enum": ["READY", "GAPS", "NEEDS_SEAM", "COMPOSED", "BLOCKED"]},
-    "decision_owner": {"type": "string"},
-    "callers_inspected": {"type": "array", "items": {"type": "string"}},
-    "callees_inspected": {"type": "array", "items": {"type": "string"}},
-    "effects_found": {"type": "array", "items": {"type": "string"}},
-    "tests_added": {"type": "array", "items": {"type": "string"}},
-    "sensitivity_evidence": {"type": "array", "items": {"type": "string"}},
-    "compatibility_risks": {"type": "array", "items": {"type": "string"}},
-    "approval_required": {"type": "boolean"},
-    "production_change_made": {"type": "boolean"},
-    "remaining_risks": {"type": "array", "items": {"type": "string"}}
+    "classification": {
+      "enum": [
+        "READY",
+        "GAPS",
+        "NEEDS_SEAM",
+        "COMPOSED",
+        "BLOCKED"
+      ]
+    },
+    "decision_owner": {
+      "type": "string"
+    },
+    "callers_inspected": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "callees_inspected": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "effects_found": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "tests_added": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "sensitivity_evidence": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "compatibility_risks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "approval_required": {
+      "type": "boolean"
+    },
+    "production_change_made": {
+      "type": "boolean"
+    },
+    "remaining_risks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "inferred_rules": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "protection_gaps": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "containment_evidence": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
   }
 }

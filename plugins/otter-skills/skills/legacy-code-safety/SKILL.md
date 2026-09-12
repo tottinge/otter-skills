@@ -38,7 +38,8 @@ This skill owns **establishing safety**. `unit-testing` owns specifying and impl
 
 - Start from an intentional workspace and record relevant inherited failures before editing.
 - Characterization describes observed behavior, not desired behavior.
-- Separate observations, suspected defects, and requested changes.
+- Separate observed compatibility, inferred rules, suspected defects, and intended changes.
+- Establish containment before unfamiliar execution, including test collection and cleanup.
 - Break only the dependencies that block sensing or separation for this change.
 - Do not manufacture a unit-test target from code that merely composes effectful calls.
 - Production code must not branch on whether it is under test.
@@ -69,7 +70,7 @@ Ask three questions throughout: How will we know the requested change is correct
 
 ### 2. Find the narrowest useful test point
 
-Inspect the target and relevant callees statically before executing or refactoring.
+Inspect the target, callers, relevant callees, and test execution path statically before executing or refactoring.
 Trace where the relevant decisions and transformations actually live; the requested
 function may only delegate to a deeper owner.
 
@@ -92,7 +93,7 @@ Static inspection can identify a probable target, but cannot establish **READY**
 That requires contained execution and evidence that assertions detect relevant
 behavioral changes. High coverage alone is not sensitivity evidence.
 
-Once the target is isolated, search backward as well as forward. Inspect every
+During reconnaissance, search backward as well as forward. Inspect every
 statically discoverable direct caller and its relevant tests. Inspect farther
 upstream only when a direct caller does not reveal why it calls the target or how it
 uses the result. Caller context supplies the meaning behind the target's mechanics:
@@ -102,7 +103,8 @@ as contract evidence, not as unquestionable intent; do not freeze incidental cal
 mechanics such as local names, unused result details, or private sequencing.
 
 A function that reads only its parameters, performs no mutation or other side
-effects, and returns a fresh value is safe to execute directly. It is **READY** only
+effects, and returns a fresh value needs no effect double. Establish that its import
+and test lifecycle are contained before executing it. It is **READY** only
 when sensitive tests already protect its meaningful decisions, transformations,
 boundaries, corner cases, and distinct caller assumptions. Otherwise classify it as
 **GAPS** and add focused input/output tests. Synthesize equivalent callers into one
@@ -131,17 +133,19 @@ or global-state behavior, read
 
 ### 3. Characterize relevant behavior
 
-For one concrete input, run the current code and capture what it actually does. Establish that the test initially fails or that output is initially unapproved, inspect the observation, then record it with a behavioral name.
+Build a compact inventory of the selected unit's meaningful decisions and transformations. For each, infer a behavioral rule from target logic, caller expectations, and relevant callee contracts; record the evidence and uncertainty. Distinguish observed compatibility from intended behavior and suspected defects.
 
-Add cases for relevant branches, boundaries, failure paths, and known production examples—not indiscriminate coverage. Record suspected defects separately; do not fix or bless them silently.
+Through a contained boundary, capture actual results for examples and boundary or counterexamples that distinguish each inferred rule from plausible alternatives. Use these observations to confirm or revise the rule, then assert observable results or contractual effect intentions. Do not copy the production algorithm into the expected-value calculation or freeze incidental private structure. Tests should survive another implementation of the same rules.
+
+Map each rule to its cases, assertions, and remaining gaps. Include relevant failure paths and known production examples; do not silently fix or bless suspected defects.
 
 Use ordinary assertions for small focused results. Use approval testing for large structured output that is easier to review as a diff. Read [references/characterization-and-approvals.md](references/characterization-and-approvals.md) before creating approval artifacts.
 
 ### 4. Prove the safety net
 
-Demonstrate at least one relevant failure by seeing the initial expectation fail, making and reverting a deliberate perturbation, or using a focused mutation. Coverage identifies unexercised code; it does not prove that assertions detect change.
+For every meaningful rule in the selected unit, establish that its assertions detect a violation. Use an observed relevant failure or a focused, reversible perturbation of a decision, transformed value, or effect intention where sensitivity is uncertain. One demonstrated failure does not prove protection of other rules. An initially wrong expectation proves comparison works; it alone does not prove detection of a production regression.
 
-Restore the baseline immediately after any deliberate perturbation.
+Coverage helps locate omissions; neither a percentage nor exhaustive path combinations are the goal. Report unprotected rules as gaps rather than declaring **READY**. Before perturbing code, inspect the mutation tool's execution and cleanup, preserve the current workspace, and restore only the experiment's own edits immediately afterward.
 
 ### 5. Guard caller compatibility
 
@@ -175,13 +179,15 @@ Smallest production edit:
 Evidence behavior is preserved:
 ```
 
-Keep preparatory edits structural and green. Prefer explicit parameters or small adapters when natural in the codebase, but use language and build-system seams when they are safer than broad redesign.
+Keep preparatory edits structural and preserve available safe feedback. When remaining effects prevent execution, use static preservation checks for intermediate seam edits; require contained behavioral evidence once the boundary is runnable. Prefer explicit parameters or small adapters when natural in the codebase, but use language and build-system seams when they are safer than broad redesign.
 
-After each extraction, apply the improvement test: meaningful policy or
+After each extraction, review the improvement; establish executable sensitivity at the first contained boundary: meaningful policy or
 transformation remains in the tested unit; its fake is smaller and safer than the
 production dependency; its tests detect relevant changes; and the safety benefit
 justifies the boundary. If extraction leaves a linear mirror of effect calls, revert
-the experiment and classify the target as **COMPOSED**.
+the experiment and classify the target as **COMPOSED**. A linear sequence may still
+carry an ordering, transaction, or cleanup guarantee; protect that guarantee at a
+contained integration or contract boundary rather than freezing incidental calls.
 
 ### 7. Hand new behavior to TDD
 
@@ -193,6 +199,15 @@ Once the boundary is fast, reliable, and capable of detecting relevant change, u
 4. retain characterization tests until focused tests safely supersede them
 
 Do not confuse a characterization expectation with a test-first specification.
+
+Preserve useful discoveries at this handoff so the next maintainer need not repeat
+the reconnaissance. Keep confirmed rules and caller assumptions in distinguishing
+tests; leave safe test access reproducible through the project's existing tooling.
+Use names and small structural changes to expose intent when justified by the
+safety work. Record essential rationale or unresolved uncertainty near its owner,
+without turning observed quirks into intended behavior or copying the investigation
+transcript into agent notes. Remove temporary probes once durable protection
+supersedes them. Broader improvements belong in the subsequent green refactor loop.
 
 ### 8. Switch incrementally when the change is large
 
@@ -207,11 +222,13 @@ Report:
 ```text
 Requested change:
 Observed legacy behavior:
+Inferred rules and supporting evidence:
 Characterization added:
-Caller assumptions protected:
+Caller and callee assumptions protected:
 Breaking-change approval:
 Seams used or introduced:
-Safety-net failure demonstrated:
+Discovery preserved and future investigation avoided:
+Rule protection and sensitivity evidence:
 New behavior test and implementation:
 Verification:
 Temporary scaffolding:

@@ -6,8 +6,9 @@ read it when a meaningful decision is interleaved with several related effects.
 
 ## Inspect before execution
 
-Trace the target and relevant callees far enough to identify:
+Inspect the test command and trace the target and relevant callees far enough to identify:
 
+- effects during imports, test discovery/collection, fixtures, setup, teardown, and cleanup
 - direct and transitive effects, including framework hooks and lifecycle callbacks
 - resource, credential, endpoint, queue, process, path, and global-state selection
 - effect ordering, transaction or cleanup boundaries, retries, and exception behavior
@@ -16,8 +17,13 @@ Trace the target and relevant callees far enough to identify:
 Do not characterize against production resources or credentials. If a reachable
 effect remains unknown or cannot be redirected to a disposable, observable target,
 classify the boundary as **BLOCKED** and report what must be learned or contained.
-Static checks may support an intermediate extraction, but they do not prove the
-boundary safe.
+Use disposable resources with explicit paths and endpoints; prevent fallback to live
+credentials or production defaults. Contain subprocesses and background work and
+ensure cleanup touches only resources owned by this run. A pure target does not
+make an effectful import or fixture safe. Apply this check before the first baseline
+run and before unfamiliar mutation tooling. Once containment is known, routine
+runs need no new permission. Static checks may support an intermediate extraction,
+but they do not prove the boundary safe.
 
 ## Escalate containment gradually
 
@@ -56,7 +62,7 @@ small, safe implementation or recorder, not a simulation of the production syste
 
 ## Improvement and reversion test
 
-After each extraction, require all of the following:
+Review the improvement after each extraction. During a staged scoop, use static preservation checks while remaining effects prevent safe execution; keep the classification **NEEDS_SEAM** or **BLOCKED**. At the first contained boundary, require executable evidence for all of the following:
 
 - `do_x` still contains meaningful policy or transformation.
 - `FakeXSupport` is smaller and safer than `ProductionXSupport`.

@@ -10,7 +10,8 @@ Read this reference when existing behavior is poorly understood or the useful ob
 4. Run the code and observe the actual result.
 5. Inspect whether the observation is meaningful, stable, and safe to retain.
 6. Record the observation and name the behavior it demonstrates.
-7. Repeat only for relevant partitions, boundaries, and failure paths.
+7. Infer a rule using target, caller, and callee evidence; challenge it with distinguishing boundaries or counterexamples.
+8. Map cases and assertions to that rule, and repeat for the selected unit’s meaningful decisions and transformations.
 
 Expected values come from execution. Documentation, tickets, comments, and the agent's interpretation may explain an observation, but they do not replace it.
 
@@ -52,11 +53,16 @@ Never update approved output merely to make a failing suite green. A changed art
 
 ## Demonstrate sensitivity
 
-Execution and coverage are not enough. Confirm that the test detects a relevant behavioral change by one of these means:
+Execution and coverage are not enough. An initial incorrect expectation verifies
+comparison, not sensitivity to a production regression. For each meaningful rule,
+confirm that its assertions detect a violation using an observed relevant failure,
+or a focused perturbation where evidence is missing. Temporarily alter a protected
+value or decision, run the contained test, and restore only the experiment's edits;
+or use a contained mutation tool and inspect relevant survivors. Preserve unrelated
+work and inspect the tool's setup and cleanup before running it.
 
-- observe the initial incorrect expectation fail
-- temporarily perturb a protected value or branch, run the test, and revert
-- run a focused mutation tool and inspect surviving mutations
+Record gaps per rule. A mutation caught for one branch does not establish protection
+for another decision or transformation.
 
 Use coverage to find relevant branches not exercised, not as a quality target.
 

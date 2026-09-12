@@ -11,10 +11,10 @@ The repository is both a plugin marketplace and a directly installable Agent Ski
 | `atomic-commit` | Preserve trustworthy history as complete, green, human-vetted repository states |
 | `story-splitting-for-delivery` | Split work through progressive admission: start closed, admit one case, default-reject the rest |
 | `user-pov-sliced-stories` | Format chosen slices as **User invokes** / **User uses result** |
-| `unit-testing` | Apply FIRST microtests and the Clean Start → Tidy? → Red → Green → Refactor → Atomic Commit → Integrate loop |
+| `unit-testing` | Protect evidence-backed behavioral rules with safe, isolated FIRST microtests |
 | `representation-refactor-review` | Review through the Eight Code Virtues, including ZOM representation drift |
 | `code-object-naming` | Improve code-object names using the naming short-guide workflow |
-| `legacy-code-safety` | Find real decisions, contain effects, and prove a sensitive test boundary before risky changes |
+| `legacy-code-safety` | Infer rules from callers and callees, contain effects, and prove protection before risky changes |
 
 The canonical skill trees live in [`plugins/otter-skills/skills/`](plugins/otter-skills/skills/). Each directory basename matches its `SKILL.md` frontmatter `name`.
 
@@ -68,6 +68,21 @@ python3 evals/legacy-code-safety/dogfood.py run --model MODEL --mode smoke
 python3 evals/legacy-code-safety/dogfood.py run --model MODEL --mode release
 ```
 
+To validate the current installed skills with Otter-KR MCP evidence on the fixtures,
+use the single-arm workflow:
+
+```bash
+python3 evals/legacy-code-safety/dogfood.py run --model MODEL --mode smoke --keep-workspaces --otter-kr /absolute/path/to/otter-kr
+```
+
+This uses the checkout's existing `.venv/bin/python` and its `research` MCP tool.
+It keeps installed skills enabled, requires MCP use, and records the workflow in
+the result. Trials run sequentially, with one stdio support server owned by each
+Codex invocation. Confirm support processes have stopped before final verification.
+Otter-KR supplies static evidence; inspect sources and execute contained tests to
+establish behavioral rules and sensitivity. Its Python and tracked-file limits
+must remain visible in the assessment. This workflow is not an A/B comparison.
+
 Smoke mode runs each control/treatment arm once; release mode runs each arm three
 times. The command prints an ignored result directory containing transcripts,
 diffs, deterministic scores, and `review.json`. Complete that human-review file,
@@ -79,6 +94,19 @@ python3 evals/legacy-code-safety/dogfood.py finalize RUN_DIR --review RUN_DIR/re
 
 Any critical treatment safety failure blocks the run. Control failures remain in
 the report as comparative evidence.
+
+The fixtures cover caller compatibility, composed functions, misleading doubles,
+multiple transformation rules, and effects during test collection. Treatment
+trials receive matching snapshots of both testing skills. Reports record their
+hashes, inferred rules, protection gaps, and containment evidence. Review includes
+the generated tests, not just the model's summary.
+
+Generated tests and mutations run through `codex sandbox -P :workspace`, with a
+clean environment and bounded execution. A failed baseline skips mutation checks;
+setup errors do not count as detected behavioral mutations. Use a CLI version
+supporting that sandbox command and the explicitly selected model. The harness
+stops on an execution failure and never falls back to unrestricted test execution.
+Untracked generated files are saved with the transcripts for review.
 
 ## License
 

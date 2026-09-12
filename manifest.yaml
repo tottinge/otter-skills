@@ -1,6 +1,6 @@
 id: otter-skills
 name: Otter Skills
-version: 0.1.7
+version: 0.1.9
 description: >-
   Portable software-craft skills for thin delivery, TDD, safe change, naming,
   refactoring, and trustworthy commits. Installs into your agent's skills
@@ -13,7 +13,7 @@ origin:
   # values here are documentation for humans reading the repo.
   upstream_url: https://github.com/tottinge/otter-skills
   upstream_ref: HEAD
-  upstream_version: 0.1.7
+  upstream_version: 0.1.9
   license: Apache-2.0
   license_files: [LICENSE, NOTICE]
 skills:

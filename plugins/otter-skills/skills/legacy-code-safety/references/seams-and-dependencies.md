@@ -37,7 +37,7 @@ Choose the smallest move natural to the language and codebase:
 - split pure decision logic from an effectful shell
 - subclass and override only when that is already a coherent local technique
 
-Preserve behavior during the move. Run available tests or characterization before and after each structural step.
+Preserve behavior during the move. Run contained tests or characterization before and after each structural step when safe execution is available. If remaining effects prevent execution, statically check arguments, results, exceptions, ordering, and lifecycle during the minimal preparatory moves. Keep the boundary unproven until contained execution and sensitivity evidence are available.
 
 Avoid introducing a general architecture merely to test one path. A seam is successful when it unlocks trustworthy feedback with limited new knowledge and ownership.
 
@@ -49,6 +49,14 @@ Use a double to control or observe a collaborator, not to reproduce its entire i
 - A stub supplies controlled answers.
 - A spy records relevant calls or effects.
 - A mock encodes an expected interaction.
+
+Keep the selected unit's real decisions and transformations in execution; do not
+stub the rule being protected. Ground a double's relevant answers in the actual
+callee: result shapes and ranges, exceptions, mutation, ordering, resource ownership,
+and lifecycle. Do not invent convenient responses the collaborator cannot produce.
+When a material contract is uncertain, inspect its implementation or existing tests
+and obtain focused, contained contract evidence; report unresolved assumptions.
+The double should expose controlled outcomes, not duplicate the callee's algorithm.
 
 Prefer observable results over incidental call sequences. Extensive mocking, deep stubbing, or duplicated collaborator logic signals that the chosen boundary may be wrong.
 

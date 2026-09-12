@@ -11,7 +11,7 @@ The deliverable is a **prioritized list of representation concerns and refactor 
 
 ## When this skill owns the task
 
-Use this skill for a broad review of how code represents domain knowledge, or when the user explicitly invokes the Eight Virtues, SPOT, ZOM, Coherent, the improvement test, or Ottinger-style review.
+Use this skill for a broad review of how code represents domain knowledge, a cumulative pre-push review of a change series, or when the user explicitly invokes the Eight Virtues, SPOT, ZOM, Coherent, the improvement test, or Ottinger-style review.
 
 Do not use it as the primary skill for:
 
@@ -54,6 +54,54 @@ Internalize these before reading a line:
 3. **Pass systematically against the Eight Virtues and naming.** Read [`references/virtues.md`](references/virtues.md). Use `code-object-naming` for a naming-heavy sub-pass. Go virtue by virtue (Working, then the seven peers), including boundaries and dependencies when they are in scope. Do not pattern-match a few smells and stop. **Within the Unique, Developed, and Coherent passes, run the ZOM Drift sub-pass (see below).**
 4. **For every concern capture:** (a) location, (b) virtue(s) under pressure, (c) concrete refactoring, (d) *why it matters* to audience/maintenance. No "why" → drop it.
 5. **Prioritize and assemble** the final report in the format below.
+
+## Review whether learning accumulated
+
+For work under review, connect difficulties encountered to the representation left
+behind. Ask what the next human or agent maintainer can now understand, change, or
+verify without repeating the investigation. Look for authoritative rule ownership,
+domain vocabulary, explicit dependencies, distinguishing behavioral tests, and
+reproducible feedback. Conversational explanations alone do not establish that the
+repository preserves the discovery.
+
+For each claimed improvement, identify the previous obstacle, its new representation,
+the maintenance work removed, and any added indirection or coupling. Passing tests
+supports Working; fewer lines or an extra abstraction alone do not prove easier
+change. Apply the improvement test across the virtues. No improvement is required
+where the work already fits cleanly; do not invent future requirements to justify
+redesign.
+
+### Cumulative pre-push review
+
+Establish the intended comparison base and tip from the branch/PR context and
+report them. Review the combined diff and relevant surrounding implementation and
+tests; consult individual commits when useful to understand how a concept emerged.
+Do not assume the remote tracking tip is the whole series' base. If the intended
+range is ambiguous, resolve it before claiming coverage of the series.
+
+Look especially for individually reasonable steps that together leave repeated
+rules, competing vocabulary, scattered edits, growing conditionals, or tests tied
+to incidental structure. Identify inherited concerns separately from improvements
+or degradation introduced by the series. Recommend the smallest evidenced
+correction. Report this assessment as advisory unless project policy makes it a
+gate; it does not replace correctness checks or authorize edits, commits, or pushes.
+
+### Optional evaluation through successive changes
+
+A static review establishes evidence of changeability, not proof that the next
+change is easier. When explicitly asked to test that claim, run the same realistic
+follow-up task against before and after versions in disposable workspaces, using
+fresh agent contexts without the earlier conversation or the intended conclusion.
+Use equivalent task preconditions, tools, model settings, and budgets; if the
+versions differ in behavior, account for that before attributing results to design.
+
+Inspect actual changes and verification: correctness, coordinated edit sites,
+repeated investigation, test effort, and new representation problems. Treat time
+and token use as supporting observations, not quality scores. Repeat trials when
+needed to distinguish variability from a useful effect. Report limitations and
+failed trials. Keep experiments separate from routine push checks and production
+work; do not run them without authorization for their execution and cost. Use the
+results to revise skills only when observed behavior supports the revision.
 
 ## ZOM Drift Pass (Unique · Developed · Coherent)
 

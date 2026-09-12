@@ -68,3 +68,13 @@ This creates one deterministic `dist/<skill-name>.skill` ZIP archive per skill. 
 ## Verify an installation
 
 Ask the agent to list available skills, or invoke a skill by name—for example, “use `story-splitting-for-delivery` to split this feature.” Skill discovery and invocation wording differ slightly by client.
+
+## Keep testing workflows aligned
+
+Use `legacy-code-safety` and `unit-testing` from the same canonical release. Refresh
+both when upgrading; updating the repository does not update manually copied skills.
+Prefer one discovery location or links to the canonical directories over multiple
+copies. Older `tdd` and `unit_test_engineering` installations overlap with
+`unit-testing`; retire those duplicates after preserving any local customizations,
+or make their instructions delegate to the canonical testing workflow. Verify which
+paths the client actually loads before relying on an upgrade.

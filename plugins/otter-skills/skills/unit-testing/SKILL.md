@@ -30,7 +30,7 @@ description: Implement or extend production behavior test-first, or diagnose foc
 
 TDD is programming hygiene. Its job is not "prove the whole system" or "raise coverage." Its job is to keep code orderly and **safe to change in tiny steps** so you can refactor, integrate, and deliver without fear.
 
-- **Timely, not Thorough:** test-first keeps code testable and orderly; component, contract, E2E, and human testing are still required and not replaced by microtests.
+- **Timely:** test-first keeps code testable and orderly. Protect every meaningful rule in the selected unit; this does not require exhaustive path combinations or replace component, contract, E2E, and human testing.
 - **Test-after is not TDD:** writing tests after a production pile recreates legacy conditions — hard-to-test shapes, fear of breaking "what already works," and joyless test-after work.
 - **Review is not a substitute for tests:** `representation-refactor-review` catches representation drift and virtue violations but does not replace the microtest hygiene loop this skill owns.
 
@@ -86,6 +86,27 @@ At minimum, consider and list:
 The test list is inventory, not a batch to write in advance. Select the next
 test with ZOMBIES, make it pass, refactor, and then reconsider the list.
 
+### Ground the list in rules and evidence
+
+For existing behavior, derive rules from the real target, caller assumptions,
+relevant callee contracts, and contained observations. Use `legacy-code-safety`
+when this evidence or a safe boundary is missing. Distinguish observed
+compatibility, intended behavior, suspected defects, and uncertain inferences;
+today's output alone does not establish the intended rule.
+
+Record each meaningful decision and transformation as a behavioral proposition,
+its evidence, distinguishing examples or counterexamples, and the assertions
+that protect it. Keep this compact in the test list; name remaining gaps instead
+of implying whole-unit protection from a few passing examples. Include relevant
+boundaries, alternative outcomes, and interactions between rules.
+
+Before calling the selected unit protected, check every inventoried rule against
+its assertions. Use coverage to locate omissions, not to certify protection.
+Where sensitivity is uncertain, make a focused, reversible change to a decision
+or transformed value and confirm the relevant assertion fails. One detected
+change proves only that case; an intentionally wrong expectation proves only
+comparison. Restore only the experiment's edits and rerun the affected tests.
+
 ### Choose the test level
 
 Decision and transformation logic normally belongs under FIRST microtests.
@@ -112,6 +133,14 @@ failure mode.
 
 ## Preconditions: Clean Start
 
+Before executing unfamiliar setup, build, or test commands, inspect their effects
+through imports/collection, fixtures, teardown, subprocesses, and background work.
+Establish containment first: disposable test-owned resources, controlled
+credentials, no production access, and cleanup limited to those resources. Use
+`legacy-code-safety` for unknown effects or missing seams; do not run a baseline
+to discover whether it is dangerous. The same boundary applies to sensitivity
+experiments and new test helpers. Preserve unrelated work during edits and retreat.
+
 Before the first production edit of a task:
 
 1. Working tree intentional and tidy — no mystery untracked junk, no unrelated half-work.
@@ -122,7 +151,8 @@ Before the first production edit of a task:
 
 If anything is red before your changes, stop. That is an inherited problem; do not pile new work on a broken baseline.
 
-Run the fast suite after each small step. Testing never needs permission.
+Run the known safe, contained fast suite after each small step without repeatedly
+asking permission. A command named "test" grants no extra execution permissions.
 
 ---
 
@@ -164,6 +194,31 @@ clean/green baseline
 - Refactor tests too; treat them as production-grade code.
 - Prefer automated IDE/LSP refactor tools over manual cut/paste.
 - Stay structure-shy (see below) so tests do not freeze internals.
+
+### Make learning accumulate
+
+Before changing behavior, notice what makes this change difficult: repeated
+searching, reconstructing intent, scattered rules, hidden dependencies, or awkward
+test setup. Use Tidy First? to remove demonstrated obstacles when a small
+preparatory change will help.
+
+After each green step, ask: **What did we have to figure out, and how can the code
+now express that understanding?** Give a discovered concept a useful name, gather
+one rule under one owner, make a dependency explicit, or preserve a surprising
+contract with a distinguishing test. Improve the feedback tools when their setup
+or unreliability was the obstacle. Keep these improvements within the requested
+change; route broader representation questions to `representation-refactor-review`.
+
+Preserve rules in code, behavioral examples in tests, and otherwise inexpressible
+rationale in nearby comments or existing project documentation. Do not accumulate
+a second specification in agent notes. Preserve uncertainty as uncertainty; an
+observed quirk is not automatically a required contract.
+
+Verify behavior and assess the maintenance work removed: fewer coordinated edits,
+less reconstruction, or simpler reliable verification. Consider improvement every
+cycle, but do not manufacture churn or speculative extension points. Keep human
+and agent maintainers in the same audience. At review, give a concrete example of
+difficulty removed or introduced; say when no additional improvement was warranted.
 
 ### Atomic microcommit / Save Your Game
 
@@ -226,11 +281,19 @@ TDD's inner loop uses **microtests** (unit tests that meet FIRST):
 
 Rules of thumb:
 
-- Test the unit in an **artificial** context, not full app context.
+- Exercise the real unit in a controlled context. Keep its decisions and
+  transformations real; replace collaborators at the boundary, not the logic
+  whose behavior the test claims to protect.
 - If you need DB/HTTP/clock, fake or inject them — or move this test to a slower suite.
 - Do not grow a heavyweight test framework to compensate; shrink the test and the unit boundary.
 - Microtests do not replace component, contract, story/BDD, E2E, or human checks. They make those affordable by keeping units honest.
 - **High-fidelity rule:** production code must not branch on "am I being tested?"
+
+Doubles must reflect relevant real callee semantics: possible result shapes,
+errors, mutation, ordering, and lifecycle. Do not invent convenient impossible
+responses or reproduce the unit's decisions in a fake. Resolve uncertain
+collaborator assumptions with focused contract evidence; a fake alone cannot
+establish the real boundary's behavior.
 
 ### Make Isolated and Repeatable observable
 
@@ -282,6 +345,12 @@ Bad tests block the purpose of TDD.
 
 - Read tests to understand code; never require reading production code to understand tests.
 - Assert observable results and meaningful outcomes, not incidental private structure.
+- Derive expected values from the behavioral rule, independently of the production algorithm: hand-worked
+  examples, invariants, or relationships. Do not copy the production algorithm
+  into the oracle or call the target to calculate its own expected result.
+- Assert effect intentions and interactions only when they carry a contract
+  (such as transaction ordering or cleanup). Do not freeze incidental call
+  counts, delegation sequences, helper names, or private layouts.
 - Prefer scenario-oriented organization (shared arrange = shared situation) over rigid "one test class per production class" when clarity suffers.
 
 **Resilient under routine change**
@@ -393,8 +462,8 @@ because the failure is intermittent.
 
 ## Session algorithm
 
-1. **Clean start** — baseline green (`./prepare` / `./run_tests` as available).
-2. **Test list** — inventory likely successes, errors, and boundaries; do not write the tests as a batch.
+1. **Clean start** — establish execution containment, then baseline green (`./prepare` / `./run_tests` as available).
+2. **Test list** — connect inferred rules and evidence to cases, assertions, and gaps; do not write the tests as a batch.
 3. **Tidy First?** — ask First/After/Later/Never before each next test.
 4. **Pick one** behavior; optionally draft the commit message (intentional commit).
 5. **Red** — write the next test at the chosen level (normally a FIRST microtest); confirm its failure reason is correct.

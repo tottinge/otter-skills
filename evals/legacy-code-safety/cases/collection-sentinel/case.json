@@ -1,0 +1,48 @@
+{
+  "id": "collection-sentinel",
+  "language": "python",
+  "expected_classification_phase1": "GAPS",
+  "expected_classification_final": "READY",
+  "required_context": [
+    "catalog.py",
+    "bootstrap.py"
+  ],
+  "test_command": [
+    "python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests"
+  ],
+  "immutable_phase1": [
+    "codes.py",
+    "catalog.py",
+    "bootstrap.py",
+    "operational-record.txt"
+  ],
+  "immutable_final": [
+    "codes.py",
+    "catalog.py",
+    "bootstrap.py",
+    "operational-record.txt"
+  ],
+  "mutations": [
+    {
+      "path": "codes.py",
+      "old": "raw.strip()",
+      "new": "raw"
+    },
+    {
+      "path": "codes.py",
+      "old": ".upper()",
+      "new": ".lower()"
+    },
+    {
+      "path": "codes.py",
+      "old": ".replace(\" \", \"-\")",
+      "new": ".replace(\" \", \"_\")"
+    }
+  ],
+  "requires_approval": false
+}

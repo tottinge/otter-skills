@@ -55,12 +55,35 @@ Perform the protocol from the repository root.
    - the complete status and reviewable staged change;
    - every untracked-file disposition;
    - the exact verification commands and green results;
+   - what the work taught us, where useful discoveries now live, and concrete
+     maintenance difficulty removed or introduced; no cosmetic improvement quota;
    - the proposed Conventional Commits message.
 11. Pause. Run `git commit -m "<type>[optional scope]: <description>"` only after explicit human approval.
 
 Staging and inspection must not change repository files. If human review or any later action changes a file, the reviewed and tested state is stale: restart the untracked-file check, verification, `git add .`, staged review, and approval.
 
 After committing, confirm the working tree is clean and report the commit identifier, message, and verification performed.
+
+## Before pushing a series
+
+When preparing an authorized push, use `representation-refactor-review` to assess
+the cumulative representation across the series, not only its individual commits.
+Establish and report the intended base and tip; inspect the combined diff and
+relevant surrounding code for rules or concepts that have multiplied across steps.
+If that skill is unavailable, inspect ownership, vocabulary, coordinated edits,
+and test coupling directly and state the limits of the review.
+
+Present evidence of improved or degraded changeability and remaining tradeoffs.
+This assessment is advisory unless project policy explicitly makes it a gate;
+existing correctness and verification requirements still apply. If the developer
+chooses another improvement cycle, make forward, verified changes through the
+normal commit protocol, then reassess the resulting series. Do not rewrite history
+to make it appear that the design was known upfront.
+
+This is a workflow checkpoint, not an instruction to install a Git hook or run
+fresh-agent experiments on every push. Push authorization remains separate from
+review. Use the review skill's optional successive-change evaluation only when
+that experiment is requested and its execution is authorized.
 
 ## History rewriting and commit-producing Git operations
 

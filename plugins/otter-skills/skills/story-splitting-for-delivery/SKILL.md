@@ -99,15 +99,28 @@ Each later slice admits exactly one more:
 
 Do not bundle "the rest of the cases" into one catch-up story unless they are truly trivial and still independently testable.
 
-### 6) Finish planned admissions, keep the reject path
-When planned cases are done:
+### 6) Reassess after each demonstrated slice
+Treat planned admissions as provisional. After each demonstration, use observed
+results and available user feedback to reassess:
+- **Value:** Does the delivered behavior satisfy the need? What remaining scope is still worthwhile?
+- **Uncertainty:** Which consequential assumption remains least supported, and what small experiment could disprove it?
+- **Constraint:** Where is delivery actually waiting or requiring rework? Choose an improvement using that evidence.
+
+Choose whether to **continue**, **change direction**, or **stop**. State the evidence
+and the next useful admission or experiment, if any. Do not complete the remainder
+merely because it was planned or is cheap to generate. Preserve explicit user
+requirements; if evidence suggests dropping required scope, propose that change
+instead of silently declaring the task complete. When feedback is unavailable,
+keep that uncertainty visible rather than treating it as acceptance.
+
+Keep the reject path whether continuing or stopping:
 - surprise inputs still hit the established reject path
 - the service may already be in production doing useful work
 - remaining edge cases stay optional backlog, not a launch blocker
 
 ### 7) Continue admissions over the life of the system
 New messages, fields, schemas, and rules keep using the same pattern:
-admit one, test thoroughly, deploy, repeat.
+admit one, test thoroughly, demonstrate, reassess, deploy when appropriate, repeat.
 
 ## Versioning guidance
 When interfaces are versioned:

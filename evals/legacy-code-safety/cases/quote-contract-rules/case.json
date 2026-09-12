@@ -1,0 +1,56 @@
+{
+  "id": "quote-contract-rules",
+  "language": "python",
+  "expected_classification_phase1": "GAPS",
+  "expected_classification_final": "READY",
+  "required_context": [
+    "checkout.py",
+    "offers.py"
+  ],
+  "test_command": [
+    "python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests"
+  ],
+  "immutable_phase1": [
+    "pricing.py",
+    "offers.py",
+    "checkout.py"
+  ],
+  "immutable_final": [
+    "pricing.py",
+    "offers.py",
+    "checkout.py"
+  ],
+  "mutations": [
+    {
+      "path": "pricing.py",
+      "old": "if offer.eligible else 0",
+      "new": "if True else 0"
+    },
+    {
+      "path": "pricing.py",
+      "old": "min(offer.rate, 0.25)",
+      "new": "offer.rate"
+    },
+    {
+      "path": "pricing.py",
+      "old": "max(5, round(subtotal * (1 - discount), 2))",
+      "new": "round(subtotal * (1 - discount), 2)"
+    },
+    {
+      "path": "pricing.py",
+      "old": "if subtotal < 0:",
+      "new": "if False:"
+    },
+    {
+      "path": "pricing.py",
+      "old": "round(subtotal * (1 - discount), 2)",
+      "new": "round(subtotal * (1 - discount), 0)"
+    }
+  ],
+  "requires_approval": false
+}
