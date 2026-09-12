@@ -21,8 +21,11 @@ def export(output_filename, data_to_write):
     ...
 ```
 
-These markers say: "each section deserves a name." Extract each commented
-block to a function; use the comment text as the name seed. Delete the comment.
+These markers suggest concepts to investigate. Check whether an existing owner,
+a named expression, or a function would express the knowledge better. Extract only
+when the boundary improves understanding and changeability; remove a comment only
+when its useful meaning is carried by the code. Preserve otherwise inexpressible
+rationale. The following is one possible improvement, not a required shape:
 
 ```python
 def export(output_filename: str, data_to_write: DataSet):
@@ -79,8 +82,11 @@ class CustomerOrderProcessor:
     def award_loyalty_points(self, customer, order): ...
 ```
 
-When naming is difficult, ask: *"What is the ONE thing this class does?"* If
-the answer requires "and," split it.
+When naming is difficult, investigate whether independent concepts are combined.
+The word "and" alone is not evidence for splitting: a coherent owner may coordinate
+several operations under one invariant or lifecycle. Use the class-boundary
+guidance in `representation-refactor-review` to inspect construction, shared rules,
+and interactions before recommending a split.
 
 ## Explanatory variable as a stepping stone
 
@@ -91,13 +97,13 @@ to a function. This two-step makes extraction safer and easier to verify.
 
 > Extraction is not just moving text — it's building vocabulary.
 
-Every extracted function is a named concept. A codebase with good function
+A useful extracted function names a concept. A codebase with good function
 names is **browseable**: readers can scan function calls without reading
 implementations, find what they need, and change it safely.
 
 ## Extraction moments (decision table)
 
-| Signal in code | Recommended extraction |
+| Signal in code | Candidate to investigate |
 |---|---|
 | Inline comment describes a block | Extract block to function; comment → name |
 | Long boolean condition | Extract to `is_X()` / `can_X()` predicate |
@@ -106,3 +112,8 @@ implementations, find what they need, and change it safely.
 | `as_X()` conversion on a host object | Extract a whole value object type |
 | Same expression duplicated | Extract to a Single Point of Truth function |
 | Name is clear inside module, confusing outside | Add import alias; or rename class |
+
+These candidates are not prescriptions. Compare local vocabulary and existing
+owners, preserve behavior, and apply the improvement test across the peer virtues.
+Reject or shrink an extraction that adds indirection without improving ownership
+or the work of understanding and changing the code.

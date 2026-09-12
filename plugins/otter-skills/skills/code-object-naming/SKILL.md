@@ -139,19 +139,26 @@ Match name length to how far the name must travel.
 - Names used by framework reflection
 - Names in separately-maintained documentation
 
-**Extraction moments** — when to extract rather than (only) rename:
+**Extraction candidates** — signals to investigate before choosing a change:
 
 | Signal | Action |
 |---|---|
-| Block has a paragraph comment | Extract the block to a function; use comment text as name seed |
-| Complex boolean condition | Extract to `is_eligible_for_X()` predicate function |
-| Variable with long explanatory name | Extract to a named function returning the value |
-| Class is hard to name | Class likely has multiple responsibilities — split it |
+| Block has a paragraph comment | Identify the concept or rationale; consider a named expression or function |
+| Complex boolean condition | Look for an existing policy owner; consider a named expression or predicate |
+| Variable with long explanatory name | Check scope and responsibility before choosing a rename or extraction |
+| Class is hard to name | Investigate data, invariants, lifecycle, and independently meaningful responsibilities |
 | Repeated `as_X()` conversion method | Signal for a whole value object type |
 | Name is fine in its file, confusing outside | Add context via import alias or rename |
 
-> Extraction builds vocabulary. Every extracted function is a named concept
-> that makes the codebase more browsable and its tests more focused.
+Extraction can build vocabulary, but another name or forwarding layer is not
+automatically a useful concept. Inspect callers and nearby representations; prefer
+an existing knowledge owner when meanings agree. For class boundaries, use
+`representation-refactor-review` and its class-boundary guidance.
+
+Apply the improvement test: preserve behavior and keep the change only when the
+peer virtues improve together. Check whether it reduces reconstruction or
+coordinated edits without scattering invariants or adding chatty indirection.
+Keep the current structure or try a smaller change when extraction does not help.
 
 ---
 

@@ -51,7 +51,10 @@ The code has to work. Working is not design taste. We may accept a little duplic
 - Without behavioural evidence, "refactoring" becomes wishful rewriting.
 - If tests are missing or thin: characterise behaviour, find a seam, or make careful preliminary changes so important behaviour can be observed—especially under agentic change.
 
-**Review implications:** Establish this first. Missing/failing tests for code under change, untested rewrites, and "it should work" are P1. Without Working, no other virtue is interesting.
+**Review implications:** Establish behavioral evidence first. Identify the concrete
+regression consequence and distinguish missing evidence from demonstrated failure.
+Use the priority indicators in `../SKILL.md`; missing tests alone do not establish
+critical severity.
 
 ## 2. Unique — *as opposed to duplicated knowledge*
 
@@ -61,6 +64,11 @@ The code has to work. Working is not design taste. We may accept a little duplic
 - Duplication is often non-textual: the same rule as calculation, conditional, comment, config, UI list, and test fixture.
 - Example: payment methods as enum + UI list + config strings + validation branches + serialisation maps + fixtures—different text, same knowledge.
 - Ask: would these have to change together because they express the same fact or rule? If yes, one authoritative home; derive the rest.
+- Independent behavioral expectations are evidence about a rule, not a second
+  executable policy owner. Keep hand-worked examples and counterexamples independent
+  of production calculations and policy tables so tests can disagree with defects.
+  Share incidental fixture setup when useful; do not derive the expected answer
+  from the implementation being checked.
 - Heuristics: version history of co-change; text/dupe detectors (with known limits).
 
 **Review implications:** Duplicated facts/algorithms and implicit shared assumptions are P1 when they can silently corrupt behaviour under maintenance.
@@ -165,7 +173,7 @@ Moving comment knowledge into names/types/functions improves Unique, Clear, Simp
 3. Inspect comments (restate? obsolete? promotable to code? indispensable rationale? temporary scaffolding?).
 4. Ask whether the concept has **one owner**. Prefer the smallest representation that gives it one.
 5. Separate observation / inference / proposed action; name virtues under pressure and tradeoffs.
-6. Small behaviour-preserving steps; tests green; structural commits separate from behavioural ones. Strengthen safety evidence before broad refactoring.
+6. Small behaviour-preserving steps; tests green; structural and behavioural steps separately verifiable. Use `atomic-commit` for commit boundaries. Strengthen safety evidence before broad refactoring.
 7. Re-evaluate with the improvement test. If not better overall—revert.
 
 ---

@@ -21,9 +21,10 @@ Each slice must be independently demoable.
 1. If no admission plan exists yet, create one with `story-splitting-for-delivery` first.
 2. Restate the capability in customer terms: who, behavior change, value now.
 3. For each admission slice, write the user-visible invoke/result pair (see format below).
-4. Keep slices small — typically 1–3 days.
-5. Define concrete acceptance examples before implementation.
-6. Re-split after each delivered slice based on feedback.
+4. Preserve the supplied boundaries, order, scope, and acceptance meaning.
+5. Express concrete acceptance examples without inventing new requirements.
+6. If a slice cannot be expressed faithfully or feedback calls for re-splitting,
+   identify the issue and route that decision to `story-splitting-for-delivery`.
 
 ## Required output format
 For each slice, always produce:
@@ -34,11 +35,12 @@ For each slice, always produce:
 - **Acceptance checks:** \<2–4 testable checks\>
 - **Not yet in this slice:** \<explicitly deferred scope\>
 
-## Sequencing rules
-- Deliver 2–5 slices at a time.
-- Put the safest value slice first.
-- Put highest uncertainty reduction in slice 1 or 2.
-- Keep later slices negotiable; do not over-specify implementation.
+## Preserve planning decisions
+
+Sequencing, batch size, and admission choices belong to
+`story-splitting-for-delivery`. Translate the existing plan without silently
+reordering, splitting, combining, or dropping slices. Keep unresolved planning
+questions visible rather than resolving them through wording changes.
 
 ## Quality gate before finalizing slices
 Confirm each slice:

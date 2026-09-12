@@ -258,7 +258,7 @@ Maintain the Beck-style test list. Pick the next test using ZOMBIES, not arbitra
 
 Before writing each next test, ask explicitly: **First, After, Later, or Never?**
 
-- **First** — current structure would make the upcoming test awkward or impossible to add cleanly. Do the structural change now, as its own step: tests green before and after, no behavior change, separate commit from the behavior that follows. This is "make the change easy, then make the easy change."
+- **First** — current structure would make the upcoming test awkward or impossible to add cleanly. Do the structural change now, as its own step: tests green before and after, no behavior change. Keep the structural step separately verifiable; `atomic-commit` owns commit boundaries for the coherent requested change. This is "make the change easy, then make the easy change."
 - **After** — structure is fine for this test; land the behavior now, clean up in the refactor step once green.
 - **Later** — worth doing eventually, not blocking right now. Note it (comment, ticket, journal — whatever the project already uses) and proceed.
 - **Never** — the cost of tidying exceeds the benefit. Say so and move on; don't tidy reflexively.
