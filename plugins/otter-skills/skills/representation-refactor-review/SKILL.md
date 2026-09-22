@@ -31,6 +31,7 @@ A broad representation review may still surface naming and test-design evidence.
 | [`references/virtues.md`](references/virtues.md) | Before writing findings — definitions, improvement test, Coherent, comments |
 | [`references/class-boundaries.md`](references/class-boundaries.md) | When data clusters, construction semantics, extracting a class/value object, or splitting a class are in scope |
 | [`references/evidence-providers.md`](references/evidence-providers.md) | When repository-analysis tools such as Otter-KR, Serena, or Graphify are available |
+| [`references/provider-otter-kr.md`](references/provider-otter-kr.md) | When Otter-KR is connected and a concrete evidence query is useful |
 
 Keep the workflow here; put depth in the reference. Use the sibling `code-object-naming` skill when a review needs a dedicated naming pass.
 
@@ -55,6 +56,18 @@ When a provider is used:
 - treat provider output as observation, never as a semantic verdict;
 - state which evidence dimensions were unavailable or remained uncertain;
 - re-query relevant evidence after a material refactoring when the provider supports it.
+
+### Bounded baseline packet
+
+For a review with a defined file or change scope, use a provider's bounded review packet as an
+optional baseline. With Otter-KR, prefer `git.review_packet.file` or `git.review_packet.files` for
+selected files; use the whole `git.review_packet` only when the review scope genuinely warrants it.
+Record the repository revision, history window, file scope, warnings, and truncation before
+interpreting the packet.
+
+The packet organizes evidence; it does not approve the change or replace the virtue-by-virtue
+review. If the packet is unavailable, collect the same categories manually and state the missing
+coverage. Widen from the baseline only when a concrete signal justifies a focused query.
 
 ## Mindset
 
