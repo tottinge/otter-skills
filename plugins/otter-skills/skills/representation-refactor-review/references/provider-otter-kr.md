@@ -75,6 +75,32 @@ When a cluster or lifecycle report is broad, narrow the query with explicit name
 and preserve the report's warnings and parse failures. Do not infer object identity from a shared
 identifier alone.
 
+## Control-flow and boundary interpretation
+
+Use the following operations to investigate Simple and Coherent pressure:
+
+- `python.complexity` reports branch, nesting, line, and cyclomatic-style observations by function;
+- `python.carrier_guards` reports repeated predicates, early exits, else guards, effects, and
+  normalized shapes for a selected carrier;
+- `python.discriminations` reports declarations, comparisons, and lookups for a selected type;
+- `python.imports` and `python.neighborhood.*` report statically visible relationships around a
+  module or seed;
+- `python.graph_topology` reports graph structure, communities, bridges, and formulas.
+
+Interpret these in stages:
+
+```text
+machinery count → repeated decision/boundary evidence → source/test inspection → representation choice
+```
+
+Complexity is not a badness score. A graph bridge is not automatically a boundary leak. A repeated
+guard is not automatically one rule. A type discrimination is not automatically a demand for
+polymorphism. The source, tests, local dialect, and likely change must justify the action.
+
+For graph and neighborhood evidence, preserve the relationship reason, edge provenance, filters,
+and topology formulas. Do not collapse structural, behavioral, historical, and import relationships
+into one unexplained coupling claim.
+
 ## Manual fallback
 
 When Otter-KR is absent, unavailable, or outside its Python/tracked-file boundary:

@@ -121,6 +121,37 @@ Typical evidence-to-question routes:
 | variables repeatedly guarded and constructed together | Is a concept being assembled at every use site? | introduce a type or gather construction |
 | several methods operate on the same carrier fields | Does the carrier own behavior or a lifecycle? | move behavior to the owner or extract a cohesive boundary |
 
+## Focused control-flow and boundary evidence pass
+
+Use this pass when the code appears to contain many cases pretending to be one, or when several
+representations may be speaking different dialects about the same concept.
+
+1. **Measure the machinery.** Inspect complexity evidence for branches, nesting, paths, and the
+   function locations involved. Counts establish structural pressure; they do not establish bad
+   design.
+2. **Locate repeated decisions.** Use guard and discrimination evidence to find recurring predicates,
+   early exits, type checks, enum comparisons, and lookup sites. Compare their raw forms and
+   normalized shapes before deciding whether they express one rule.
+3. **Trace the boundary.** Inspect imports, structural/behavioral neighborhoods, and graph topology
+   to see whether related knowledge is scattered, whether a bridge is intentional, or whether
+   multiple modules use competing representations.
+4. **Read the domain code and tests.** A table, policy, state model, owner, or explicit conditional
+   may each be the best representation. Provider associations do not choose among them.
+5. **Make the smallest move.** Replace a growing conditional with a table only when cases are data;
+   gather a rule only when it has one authoritative home; introduce a boundary only when the
+   concepts and interaction are independently meaningful.
+6. **Recheck the balance.** Preserve Working and compare path count, vocabulary, ownership,
+   changeability, and added indirection together.
+
+Typical routes:
+
+| Observation | Focused question | Possible representation move |
+| --- | --- | --- |
+| high branches or nesting in one function | Is variation represented as machinery rather than data or policy? | replace conditional with table/policy, or extract a named decision |
+| repeated normalized guards | Is one state/rule represented at many sites? | gather the rule, name the state, or preserve distinct rules |
+| repeated enum/type checks | Does the variation have a stable owner or lookup representation? | move behavior, introduce policy, or derive a table |
+| imports or graph bridges across clusters | Is this an intentional adapter or a missing boundary? | preserve the adapter, gather the concept, or split the boundary |
+
 ## Review whether learning accumulated
 
 For work under review, connect difficulties encountered to the representation left
