@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import shutil
 from pathlib import Path
-from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
+from zipfile import ZIP_STORED, ZipFile, ZipInfo
 
 ROOT = Path(__file__).resolve().parents[1]
 SKILLS = ROOT / "plugins" / "otter-skills" / "skills"
@@ -15,7 +15,9 @@ ARCHIVE_TIME = (1980, 1, 1, 0, 0, 0)
 
 def add_file(archive: ZipFile, path: Path, archive_name: str) -> None:
     info = ZipInfo(archive_name, ARCHIVE_TIME)
-    info.compress_type = ZIP_DEFLATED
+    # Store entries without runtime-dependent zlib output. The generated archives are small,
+    # and byte identity across Python/zlib versions matters more than compression here.
+    info.compress_type = ZIP_STORED
     info.external_attr = 0o100644 << 16
     archive.writestr(info, path.read_bytes())
 
