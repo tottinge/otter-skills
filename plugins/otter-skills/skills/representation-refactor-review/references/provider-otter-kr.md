@@ -48,6 +48,33 @@ After reading the packet, request a narrower focused operation only when its evi
 Do not run every operation by default. A focused query should answer a live question raised by the
 baseline or source reading.
 
+## Structural evidence interpretation
+
+Use these operations as a sequence of increasingly specific observations:
+
+1. `python.duplicates.compact` identifies repeated helper structure with bounded shape facts and
+   occurrence locations.
+2. `python.groups` identifies repeated ordered parameter or field groups.
+3. `python.variable_cluster` follows explicitly supplied names through scopes, guards, aliases,
+   construction sites, tests, and bounded history.
+4. `python.object_lifecycle` follows one carrier through construction, field operations,
+   transitions, aliases, and boundaries.
+
+The first two establish repetition; the latter two investigate whether the repetition has a
+potential concept boundary. Keep the interpretations separate:
+
+```text
+Structural observation → candidate relationship → source/test inspection → refactoring choice
+```
+
+For example, a repeated parameter group is evidence that a value object may exist, not evidence
+that one should be introduced. Shared construction rules, invariants, normalization, or behavior
+are the additional evidence needed before recommending that move.
+
+When a cluster or lifecycle report is broad, narrow the query with explicit names or a path bound
+and preserve the report's warnings and parse failures. Do not infer object identity from a shared
+identifier alone.
+
 ## Manual fallback
 
 When Otter-KR is absent, unavailable, or outside its Python/tracked-file boundary:

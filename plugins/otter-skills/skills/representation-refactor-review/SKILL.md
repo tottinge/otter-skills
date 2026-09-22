@@ -88,8 +88,38 @@ Internalize these before reading a line:
 1. **Establish Working first.** Inspect the project instructions and diff before choosing checks. Run the narrowest relevant existing tests when the user has asked for a review and local, non-mutating verification is available. If you cannot verify behaviour, state that limitation. Missing tests is a finding only when it creates a concrete regression risk for changed behaviour; absence alone is not automatically P1.
 2. **Read for the audience.** Flag every place you reverse-engineered intent.
 3. **Pass systematically against the Eight Virtues and naming.** Read [`references/virtues.md`](references/virtues.md). Use `code-object-naming` for a naming-heavy sub-pass. Go virtue by virtue (Working, then the seven peers), including boundaries and dependencies when they are in scope. Do not pattern-match a few smells and stop. **Within the Unique, Developed, and Coherent passes, run the ZOM Drift sub-pass (see below).**
-4. **For every concern capture:** (a) location, (b) virtue(s) under pressure, (c) concrete refactoring, (d) *why it matters* to audience/maintenance. No "why" → drop it.
-5. **Prioritize and assemble** the final report in the format below.
+4. **Widen evidence only when a signal warrants it.** For repeated helpers, literals, parameter groups, traveling values, or shared object operations, use the focused structural evidence pass described below when an evidence provider supports it. Otherwise perform the same investigation manually.
+5. **For every concern capture:** (a) location, (b) virtue(s) under pressure, (c) concrete refactoring, (d) *why it matters* to audience/maintenance. No "why" → drop it.
+6. **Prioritize and assemble** the final report in the format below.
+
+## Focused structural evidence pass
+
+Use this pass to investigate whether repeated structure represents duplicated knowledge or an
+undeveloped concept. It supplements, rather than replaces, the ZOM pass.
+
+1. **Observe repetition.** Locate repeated helper shapes, literals, ordered parameter/field groups,
+   variables that travel together, or multiple operations on the same carrier.
+2. **Choose the narrowest evidence query.** Prefer structural duplicates for helper repetition,
+   repeated groups for parameter/field repetition, variable clusters for traveling values, and
+   object lifecycles for construction and mutation. Do not run every analyzer by default.
+3. **Check semantic independence.** Read the cited occurrences and tests. Equal structure or names
+   may be coincidental; do not merge facts merely because their current values match.
+4. **Look for ownership evidence.** A type/value object requires more than clumping: look for
+   shared construction rules, invariants, normalization, or behavior. A helper extraction requires
+   one rule that would need one authoritative home.
+5. **Propose the smallest move.** Extract, gather, introduce, rename, replace, or leave separate.
+   The evidence suggests a question; it does not dictate a class or pattern.
+6. **Apply the improvement test.** Preserve Working and compare the peer virtues together. Re-query
+   the relevant structural evidence after a change when the provider supports it.
+
+Typical evidence-to-question routes:
+
+| Observation | Focused question | Possible representation move |
+| --- | --- | --- |
+| structurally repeated helpers | Is one rule represented in multiple executable homes? | gather or derive one authoritative helper |
+| repeated parameter/field groups | Do these values travel together with shared rules? | introduce a value object or named parameter group |
+| variables repeatedly guarded and constructed together | Is a concept being assembled at every use site? | introduce a type or gather construction |
+| several methods operate on the same carrier fields | Does the carrier own behavior or a lifecycle? | move behavior to the owner or extract a cohesive boundary |
 
 ## Review whether learning accumulated
 
