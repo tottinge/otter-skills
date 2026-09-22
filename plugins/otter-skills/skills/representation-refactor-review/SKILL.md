@@ -30,8 +30,31 @@ A broad representation review may still surface naming and test-design evidence.
 | This file | Always when the skill is active |
 | [`references/virtues.md`](references/virtues.md) | Before writing findings — definitions, improvement test, Coherent, comments |
 | [`references/class-boundaries.md`](references/class-boundaries.md) | When data clusters, construction semantics, extracting a class/value object, or splitting a class are in scope |
+| [`references/evidence-providers.md`](references/evidence-providers.md) | When repository-analysis tools such as Otter-KR, Serena, or Graphify are available |
 
 Keep the workflow here; put depth in the reference. Use the sibling `code-object-naming` skill when a review needs a dedicated naming pass.
+
+## Optional evidence providers
+
+Repository-analysis tools are **turbochargers, not prerequisites**. The skill owns the
+interpretation and refactoring judgment; an evidence provider supplies faster, broader, and more
+reproducible observations when one is available.
+
+Ask for evidence capabilities, not for a particular product. Prefer the strongest available
+provider for the question, compose providers when useful, and fall back to source reading, `rg`,
+tests, and Git when no provider supports the capability. Never block a review merely because an
+optional provider is absent.
+
+For the capability vocabulary, provider selection, fallback methods, and evidence boundaries,
+read [`references/evidence-providers.md`](references/evidence-providers.md).
+
+When a provider is used:
+
+- record its repository scope, revision, bounds, and warnings;
+- cite source locations from the evidence rather than repeating an opaque summary;
+- treat provider output as observation, never as a semantic verdict;
+- state which evidence dimensions were unavailable or remained uncertain;
+- re-query relevant evidence after a material refactoring when the provider supports it.
 
 ## Mindset
 
