@@ -32,6 +32,7 @@ A broad representation review may still surface naming and test-design evidence.
 | [`references/class-boundaries.md`](references/class-boundaries.md) | When data clusters, construction semantics, extracting a class/value object, or splitting a class are in scope |
 | [`references/evidence-providers.md`](references/evidence-providers.md) | When repository-analysis tools such as Otter-KR, Serena, or Graphify are available |
 | [`references/provider-otter-kr.md`](references/provider-otter-kr.md) | When Otter-KR is connected and a concrete evidence query is useful |
+| [`references/evaluation-cases.md`](references/evaluation-cases.md) | When validating degraded mode, provider substitution, or before/after evidence claims |
 
 Keep the workflow here; put depth in the reference. Use the sibling `code-object-naming` skill when a review needs a dedicated naming pass.
 
