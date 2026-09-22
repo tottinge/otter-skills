@@ -69,6 +69,21 @@ The packet organizes evidence; it does not approve the change or replace the vir
 review. If the packet is unavailable, collect the same categories manually and state the missing
 coverage. Widen from the baseline only when a concrete signal justifies a focused query.
 
+## Evidence-backed re-evaluation
+
+When a review leads to a behavior-preserving refactoring, preserve the baseline and re-query the
+relevant evidence after the change. Compare the representation, not just the line count:
+
+- duplicated or scattered knowledge and its authoritative home;
+- traveling data, construction rules, and lifecycle ownership;
+- decision paths, guards, discriminations, and boundary relationships;
+- likely change sites and history-backed coordination;
+- tests, warnings, parse failures, and remaining uncertainty.
+
+If an evidence provider is unavailable after the change, verify the same questions manually and
+state the reduced confidence. A changed metric is an observation; the improvement test still needs
+human interpretation across Working and the peer virtues.
+
 ## Mindset
 
 Internalize these before reading a line:

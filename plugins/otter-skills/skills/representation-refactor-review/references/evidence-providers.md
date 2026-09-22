@@ -142,3 +142,31 @@ Manual fallback:
 
 The provider is ready for use when the same review can run with it, without it, and with another
 provider while preserving the skill's judgments, uncertainty, and improvement test.
+
+## Provider substitution and degraded-mode evaluation
+
+Treat provider support as an interchangeable evidence source. A useful evaluation runs the same
+review case in at least two modes:
+
+| Mode | Expected result |
+| --- | --- |
+| No provider | The skill investigates with source, tests, search, and Git, and reports evidence gaps honestly |
+| One provider | The skill uses supported capabilities to improve speed, coverage, or reproducibility |
+| Different provider | The skill preserves the same reasoning and finding structure while using different evidence |
+
+The provider-enabled mode must not create findings that are impossible to justify from the cited
+source and tests. The provider-disabled mode must remain useful, even if history, topology, or
+structural precision is weaker.
+
+For a before/after refactoring evaluation:
+
+1. record the baseline repository revision or working-tree state;
+2. gather only the evidence relevant to the proposed concern;
+3. make and verify the behavior-preserving change;
+4. re-query the same capability when possible;
+5. compare ownership, duplication, paths, vocabulary, changeability, and uncertainty;
+6. retain the change only when Working is preserved and the peer virtues improve together.
+
+Do not measure providers by a single score. Review correctness, source traceability, useful
+coverage, token economy, and graceful degradation separately. A provider that is fast but opaque,
+or broad but semantically misleading, is not an unconditional improvement.
