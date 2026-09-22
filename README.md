@@ -16,6 +16,15 @@ The repository is both a plugin marketplace and a directly installable Agent Ski
 | `code-object-naming` | Improve code-object names using the naming short-guide workflow |
 | `legacy-code-safety` | Infer rules from callers and callees, contain effects, and prove protection before risky changes |
 
+The representation-review skill can use optional repository-evidence providers such as Otter-KR,
+Serena, or Graphify. Providers accelerate and strengthen investigation; they are not installation
+or runtime dependencies. The skill requests evidence capabilities—duplicates, variable clusters,
+lifecycles, complexity, dependencies, history, and topology—and falls back to source reading,
+search, tests, and Git when a provider is absent. See the skill's
+[`evidence-providers.md`](plugins/otter-skills/skills/representation-refactor-review/references/evidence-providers.md)
+and [`evaluation-cases.md`](plugins/otter-skills/skills/representation-refactor-review/references/evaluation-cases.md)
+references.
+
 The canonical skill trees live in [`plugins/otter-skills/skills/`](plugins/otter-skills/skills/). Each directory basename matches its `SKILL.md` frontmatter `name`.
 
 ## Host compatibility
