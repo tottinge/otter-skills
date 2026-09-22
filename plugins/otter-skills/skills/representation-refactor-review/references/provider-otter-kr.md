@@ -101,6 +101,27 @@ For graph and neighborhood evidence, preserve the relationship reason, edge prov
 and topology formulas. Do not collapse structural, behavioral, historical, and import relationships
 into one unexplained coupling claim.
 
+## History and changeability interpretation
+
+Use these operations when the review asks whether a likely change has an awkward home:
+
+- `git.hotspots` reports bounded file change frequency and churn;
+- `git.branch_additions` reports branch or conditional constructs added across commits for one file;
+- `git.cochange.file` and `git.cochange.pair` report normalized historical file relationships;
+- `git.ownership` reports bounded maintenance observations;
+- `git.topic_family` and `git.line_origins` provide bounded change provenance when a rule's history
+  needs explanation;
+- `git.snapshot` and `git.history` provide bounded temporal context.
+
+Use a real or imminent change as the question boundary. A hotspot is not a design defect. Co-change
+is not semantic coupling. Ownership evidence is not blame. Topic ancestry does not prove that a
+commit introduced a defect. These operations show where to investigate whether the current
+representation gives change a coherent home.
+
+Record the time window, limit, rename policy, excluded commits, and truncation. If the window is too
+shallow or the repository has insufficient history, report that limitation rather than upgrading a
+weak signal into a conclusion.
+
 ## Manual fallback
 
 When Otter-KR is absent, unavailable, or outside its Python/tracked-file boundary:

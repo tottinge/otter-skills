@@ -152,6 +152,34 @@ Typical routes:
 | repeated enum/type checks | Does the variation have a stable owner or lookup representation? | move behavior, introduce policy, or derive a table |
 | imports or graph bridges across clusters | Is this an intentional adapter or a missing boundary? | preserve the adapter, gather the concept, or split the boundary |
 
+## Focused history and changeability evidence pass
+
+Use history to evaluate **Easy** and to distinguish a profitable domain difficulty from accumulated
+representation drift. History is supporting evidence about change, not a substitute for reading the
+current code.
+
+1. **Name the likely change.** Identify the real or imminent change that may be awkward. Do not
+   redesign for an imaginary future.
+2. **Inspect bounded hotspots and branch growth.** Ask where edits and new decisions accumulate,
+   and whether the current representation gives that change a natural home.
+3. **Inspect co-change and ownership.** Look for files or concepts that repeatedly change together
+   or have scattered maintenance responsibility. Treat this as a lead, not semantic coupling or
+   blame.
+4. **Use topic history or line origins when provenance matters.** Trace how a rule or representation
+   arrived without claiming that a commit caused a defect or that an author owns a design problem.
+5. **Compare alternatives against the real change.** A boundary or policy is an improvement only if
+   it makes the likely change easier while preserving Working and the other peer virtues.
+
+Typical routes:
+
+| History observation | Focused question | Possible representation move |
+| --- | --- | --- |
+| file hotspot or repeated branch additions | Is one location accumulating unrelated variation? | gather a rule, table, policy, or split boundary |
+| repeated file co-change | Is one concept scattered across files? | introduce an authoritative home or clarify an interface |
+| many apparent owners | Where should the rule be changed next time? | move knowledge to one owner or derive secondary views |
+| repeated repairs around one representation | Is the representation teaching a costly lesson repeatedly? | preserve the lesson in a type, invariant, test, or boundary |
+| stable complex history with few repairs | Is the difficulty profitable domain knowledge? | leave it intact or improve names/tests without flattening it |
+
 ## Review whether learning accumulated
 
 For work under review, connect difficulties encountered to the representation left
