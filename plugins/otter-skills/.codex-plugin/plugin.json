@@ -14,6 +14,9 @@
     "developerName": "Tim Ottinger",
     "category": "Developer Tools",
     "capabilities": ["Story slicing", "Test-driven development", "Refactoring", "Code review", "Atomic commits"],
-    "defaultPrompt": "Use the relevant Otter skill to guide this software-development task."
+    "websiteURL": "https://github.com/tottinge/otter-skills",
+    "defaultPrompt": [
+      "Use the relevant Otter skill to guide this software-development task."
+    ]
   }
 }

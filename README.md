@@ -130,4 +130,4 @@ Licensed under Apache-2.0 for commercial and open-source use. See [LICENSE](LICE
 
 ## Contributing
 
-Keep each change coherent and the repository green. Update the canonical plugin tree only; generated archives belong in `dist/`. Contributions are accepted under the repository's Apache-2.0 license.
+Keep each change coherent and the repository green. Update the canonical plugin tree only; generated archives belong in `dist/`. Contributions are accepted under the repository's Apache-2.0 license. See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution, attribution, and citation guidance.

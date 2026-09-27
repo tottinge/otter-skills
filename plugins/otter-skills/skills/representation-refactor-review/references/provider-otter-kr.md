@@ -6,6 +6,11 @@ choice, and behavioral verification.
 
 ## First query: bounded review packet
 
+Before this query, use only the user's scope, changed or named paths, project instructions/config,
+and file names to select the packet scope. Do not run source searches, inventory dependencies or
+callers, inspect test mappings, or query Git history first; those observations belong in the packet
+and its evidence links.
+
 Use one of these operations for the baseline:
 
 | Review scope | Operation | Use |
@@ -18,6 +23,34 @@ Use one of these operations for the baseline:
 Every request needs an explicit repository root. Bounded history requests need an explicit positive
 time boundary and limit. Preserve the packet's scope, revision, warnings, truncation, and source
 locations in the review notes.
+
+For the standard MCP research request, use an absolute repository root and repository-relative
+paths. A bounded single-file baseline has this shape:
+
+```json
+{
+  "repository_root": "/absolute/path/to/repository",
+  "operation": "git.review_packet.file",
+  "path": "src/module.py",
+  "since_unix_time": 1735689600,
+  "limit": 20,
+  "detail": "bounded baseline for representation review"
+}
+```
+
+Use `git.review_packet.files` with a repository-relative `paths` list for a small named set. Use
+`git.review_packet` only for an explicitly requested broad scope. Do not send absolute file paths,
+omit the positive `since_unix_time` or `limit`, or invent operation-specific fields. If a request is
+rejected, correct the reported shape once; do not retry the same research with overlapping bounds.
+
+Consume the result in this order:
+
+1. Record `scope`, revision, bounds, warnings, truncation, and locations.
+2. Select cited paths, symbols, tests, and history entries that bear on the review question.
+3. Read only those locations and the smallest context needed to establish meaning or behavior.
+4. Ask one focused follow-up only for a material question raised by the packet.
+5. Stop when each finding is source-grounded and corroborated, or report that the evidence is
+   insufficient. A larger inventory is not a better review.
 
 The packet can provide:
 
@@ -134,6 +167,9 @@ When Otter-KR is absent, unavailable, or outside its Python/tracked-file boundar
 
 Do not stage files merely to make them visible to Otter-KR. New or untracked files require direct
 inspection or a separately controlled fixture.
+
+Use the same packet-first discipline in degraded mode: establish a bounded seed, inspect only the
+selected files and evidence needed for a live question, and stop once the review is supported.
 
 ## Interpretation guardrails
 

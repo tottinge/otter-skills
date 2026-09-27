@@ -26,28 +26,39 @@ Load only what the request needs:
 | --- | --- |
 | Virtue definitions or the improvement test | [`references/virtues.md`](references/virtues.md) |
 | Data clusters, value objects, class extraction, or class splitting | [`references/class-boundaries.md`](references/class-boundaries.md) |
-| Provider selection or fallback | [`references/evidence-providers.md`](references/evidence-providers.md) |
-| Otter-KR is actually connected | [`references/provider-otter-kr.md`](references/provider-otter-kr.md) |
-| Provider substitution or degraded-mode evaluation | [`references/evaluation-cases.md`](references/evaluation-cases.md) |
+| Otter-KR is connected and will be used | [`references/provider-otter-kr.md`](references/provider-otter-kr.md) |
+| Selecting or comparing providers, or resolving a capability gap | [`references/evidence-providers.md`](references/evidence-providers.md) |
+| Explicitly evaluating or substituting providers | [`references/evaluation-cases.md`](references/evaluation-cases.md) |
 
 Do not read every reference by default. Read `virtues.md` before writing findings; read one
-provider guide only when a provider is available; read `class-boundaries.md` only when a type or
-boundary recommendation is plausible.
+provider guide only when the review needs it; read `class-boundaries.md` only when a type or
+boundary recommendation is plausible. When using Otter-KR for a routine review, its provider guide
+is sufficient; do not also load the general provider guide unless comparing providers or resolving
+a capability gap. When no provider is connected, use the fallback in this skill without loading the
+Otter-KR guide. Read evaluation cases only for an explicit provider evaluation or substitution.
 
 ## Bounded review workflow
 
-1. Establish Working: inspect project instructions, the requested diff or scope, and the narrowest
-   relevant tests/checks. State verification limits.
-2. Bound the review. Start from the diff, named files, project hotspots, or one provider packet.
-   Select a small set of relevant files and symbols. Do not enumerate or read the whole repository
-   unless the user explicitly requests a whole-repository review.
-3. Read the selected code for the audience and identify where intent had to be reconstructed.
-4. Observe representation pressure: repeated knowledge, traveling values, primitive clusters,
+1. Establish Working: inspect project instructions, the requested scope or diff metadata, and
+   project configuration needed to identify verification commands. State verification limits.
+2. Choose a seed using only the request, changed or named paths, project metadata, and file names.
+   When a capable provider is connected, request one bounded review packet before reading source
+   content or investigating tests and callers. Until that packet returns, do not inventory
+   repository contents, inspect dependencies or symbol relationships, search source or tests, or
+   query Git history. For an unscoped request, use file names only to choose a bounded seed; do not
+   run a whole-repository packet unless the user explicitly requests a whole-repository review.
+3. Follow the packet's evidence links. Preserve its revision, bounds, warnings, truncation, and
+   locations. Read only cited source spans, definitions, callers, or tests needed to interpret a
+   live question. Do not precompute or duplicate the provider's inventories, counts, dependencies,
+   lifecycle traces, or history observations.
+4. Stop enumerating when every proposed finding has a source location, sufficient corroboration,
+   and no unresolved material question. If the packet raises a specific question, use at most two
+   focused follow-ups; never repeat overlapping research merely to gather more context.
+5. Read the selected code for the audience and identify where intent had to be reconstructed.
+6. Observe representation pressure: repeated knowledge, traveling values, primitive clusters,
    competing dialects, growing decisions, scattered ownership, or dead representations.
-5. Widen evidence only for a live question. Prefer one bounded baseline and at most two focused
-   follow-ups. Never run every analyzer by default.
-6. Separate observation, inference, and action. Provider output is evidence, never a diagnosis.
-7. Propose the smallest mechanical move and apply the improvement test across Working and the peer
+7. Separate observation, inference, and action. Provider output is evidence, never a diagnosis.
+8. Propose the smallest mechanical move and apply the improvement test across Working and the peer
    virtues. Leave a concern out if no concrete improvement is justified.
 
 ## Evidence-provider contract
@@ -56,9 +67,15 @@ Providers are optional turbochargers, never prerequisites. Ask for capabilities,
 fall back to direct source reading, `rg`, tests, and bounded Git history when unavailable.
 
 When Otter-KR is connected, make one bounded `git.review_packet.file`, `.files`, or `git.review_packet`
-call appropriate to the scope. Preserve its revision, bounds, warnings, truncation, and locations.
-Use a focused follow-up only when the packet raises a specific question. Do not issue repeated
-overlapping research calls merely to gather more context.
+call appropriate to the scope before broad source reading. Preserve its revision, bounds, warnings,
+truncation, and source locations in the review notes. Follow those locations into source and tests;
+the packet is navigation evidence, not a diagnosis. Use a focused follow-up only when the packet
+raises a specific question. A provider rejection may receive one corrected request when the error
+identifies a missing bound or invalid path shape; do not repeat a successful or overlapping query.
+
+Otter-KR owns deterministic observations and provenance. This skill owns scope judgment, semantic
+interpretation, virtue assessment, refactoring choice, the improvement test, and behavioral
+verification. Do not manually redo provider-owned research before or alongside the packet.
 
 When another provider is stronger for the question, use it instead or compose it deliberately.
 Record unavailable dimensions and uncertainty. Co-change is not semantic coupling; duplication is

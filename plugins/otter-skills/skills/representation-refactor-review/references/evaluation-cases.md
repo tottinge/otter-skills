@@ -87,6 +87,31 @@ Degraded mode:
 
 - use bounded Git history, diffs, blame, and source reading while reporting shallow-history limits.
 
+## Case 5 — Packet-first evidence economy
+
+Run a bounded representation review with a connected provider and capture the raw tool-event order.
+Use a small fixture with one planted representation concern and one coincidental structural match.
+
+Expected investigation:
+
+- choose a seed from the requested scope or file metadata without broad source enumeration;
+- do not inspect history, dependencies, callers, or test mappings before the packet;
+- make one bounded review-packet query before reading broad source content;
+- follow packet locations into source, tests, and callers;
+- use no overlapping discovery queries and stop once the concern is supported or rejected;
+- preserve the coincidental match when semantic evidence does not justify coupling.
+
+Provider value:
+
+- fewer redundant inventory and enumeration actions;
+- citeable locations and bounds that guide the LLM's source reading;
+- measurable separation between provider observations and LLM judgment.
+
+Degraded mode:
+
+- use the same bounded seed and stopping rule with manual search and source reading;
+- report unavailable provider evidence instead of compensating with whole-repository enumeration.
+
 ## Acceptance matrix
 
 | Check | No provider | Provider available | Alternate provider |
@@ -98,6 +123,8 @@ Degraded mode:
 | Preserves coincidental duplication | Required | Required | Required |
 | Avoids automatic refactoring verdicts | Required | Required | Required |
 | Re-evaluates after a change | Manual or tool-assisted | Provider-assisted where possible | Provider-assisted where possible |
+| Queries one bounded packet before broad reading | N/A | Required | Required when supported |
+| Stops after cited evidence is sufficient | Required | Required | Required |
 
 An evaluation fails if the provider-enabled path is more authoritative in tone than its evidence,
 if the no-provider path blocks, or if two providers produce incompatible reasoning merely because

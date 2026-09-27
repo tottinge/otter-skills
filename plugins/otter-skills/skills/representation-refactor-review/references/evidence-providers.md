@@ -54,9 +54,11 @@ These examples are replaceable. Do not encode their operation names into the cor
 
 ### Baseline review
 
-For a bounded change or review scope, obtain an inventory of names, dependencies, tests, history,
-and representation signals if a provider can produce it. Otherwise gather the same categories with
-ordinary repository tools.
+For a bounded change or review scope, obtain one bounded provider packet before broad source reading
+when a provider can produce it. Follow its cited locations and gather only the source, tests, or
+focused evidence needed to answer live questions. Do not manually reproduce the packet's inventory,
+dependency, test, history, or representation categories first. Otherwise establish the same bounded
+seed with ordinary repository tools.
 
 ### Focused representation concern
 
@@ -70,6 +72,19 @@ Widen only after an observation warrants it:
 
 Do not request every capability for every review. Prefer the smallest evidence bundle that can
 distinguish the plausible interpretations.
+
+### Evidence-directed stopping
+
+Treat provider output as a bounded map, not a prompt to enumerate the repository. After each packet
+or focused query, ask whether the current finding has:
+
+- a cited source location;
+- enough corroboration from source, tests, callers, or bounded history;
+- no unresolved material question that could change the recommendation.
+
+If all three hold, stop. If none of the cited evidence supports a justified concern, report that
+result. Continue only for one named unanswered question at a time, with a narrow follow-up and an
+explicit reason.
 
 ### After a refactoring
 
