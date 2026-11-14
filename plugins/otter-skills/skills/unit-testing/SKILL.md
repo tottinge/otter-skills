@@ -49,6 +49,21 @@ Before the first production edit:
    show the migration/compatibility choices, and obtain explicit approval before breaking the
    contract. Do not infer permission from a general change request.
 
+For new or changed function contracts, check what the caller must know before choosing the
+next test. When the producer already knows a distinction the caller needs, carry it explicitly
+across the boundary. A domain type, named field, or tag can preserve the distinction through a
+change in representation. Test that the caller can use it directly when the distinction
+affects behavior.
+
+- Give each parameter one purpose. Accept multiple input forms when they supply the same
+  kind of input for the same purpose. When the input type selects a different operation or
+  side effect, express that choice through separate operations or an explicitly tagged request.
+- If a successful result can contain many items, use one collection shape for every count,
+  including zero and one. Test empty, singleton, and multiple results when introducing this
+  contract. Give genuinely distinct outcomes an explicit meaning through the interface, such
+  as a tagged result or an error. Report existing contracts that force callers to infer the
+  meaning from the shape and apply the compatibility guidance above to any proposed change.
+
 ## Core loop
 
 ```text
@@ -69,6 +84,7 @@ state and choose a smaller behavior; never start another concern with the suite 
 
 ## Test design rules
 
+- Read tests to understand code; never require reading production code to understand tests.
 - Test observable behavior and meaningful effect intentions, not private structure, helper names,
   incidental call counts, or deep object graphs.
 - Derive expected values independently from the production algorithm.

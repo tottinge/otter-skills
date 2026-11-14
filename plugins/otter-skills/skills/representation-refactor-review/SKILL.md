@@ -56,7 +56,8 @@ Otter-KR guide. Read evaluation cases only for an explicit provider evaluation o
    focused follow-ups; never repeat overlapping research merely to gather more context.
 5. Read the selected code for the audience and identify where intent had to be reconstructed.
 6. Observe representation pressure: repeated knowledge, traveling values, primitive clusters,
-   competing dialects, growing decisions, scattered ownership, or dead representations.
+   competing dialects, growing decisions, scattered ownership, dead representations, or function
+   contracts that make callers infer meaning from types or result shapes.
 7. Separate observation, inference, and action. Provider output is evidence, never a diagnosis.
 8. Propose the smallest mechanical move and apply the improvement test across Working and the peer
    virtues. Leave a concern out if no concrete improvement is justified.
@@ -95,6 +96,29 @@ Use these as questions, not automatic prescriptions:
 For ZOM, ask what multiplied: values suggest a collection, fields a value object, behavior an
 owner, roles a strategy/table, states a state model, rules a policy, and scattered ownership one
 authoritative home. Counts and patterns establish pressure; source, tests, and likely change decide.
+
+### Preserve knowledge across boundaries
+
+Trace a distinction from the producer that knows it to the consumer that needs it. Flag cases
+where the producer drops or disguises that distinction and the consumer has to reconstruct it
+from types, payload shape, sentinel values, parsing, or context. For example, if a producer
+flattens a structured failure into text and callers parse that text to decide whether to
+retry, carry the failure reason explicitly. A change in representation can preserve the
+distinction through a named field, tag, or domain type. Details can be omitted when consumers
+have no use for them.
+
+- Flag parameters whose type changes the operation or side effect. Show what the caller has to
+  know to select the intended action. Separate operations or an explicitly tagged request can
+  express the choice. Multiple input forms can share a parameter when its purpose stays stable.
+- Flag successful result shapes that vary only by count, such as `None`, a record, or a list of
+  records for zero, one, or many matches. Once many is possible, use one collection shape for
+  all counts. Give genuinely distinct outcomes explicit meanings, such as tagged variants or
+  errors.
+
+Cite where the producer knows the distinction, where it is obscured, and a representative
+consumer that recovers it. Show the resulting work, such as parsing, type checks, extra paths,
+or repeated interpretation rules. Record the finding for existing contracts and account for
+caller compatibility when proposing a change.
 
 ## Class and value-object restraint
 
