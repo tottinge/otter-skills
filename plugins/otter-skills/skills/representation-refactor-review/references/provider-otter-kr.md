@@ -1,8 +1,8 @@
 # Otter-KR Provider Guide
 
-Otter-KR is an optional deterministic evidence provider for this skill. It supplies citeable
-observations; the review skill and maintainer remain responsible for interpretation, refactoring
-choice, and behavioral verification.
+Otter-KR is the preferred first repository-evidence provider when available and able to cover the
+review scope. Use its observations to guide source inspection, refactoring choices, and behavioral
+verification.
 
 ## First query: bounded review packet
 
@@ -13,35 +13,32 @@ and its evidence links.
 
 Use one of these operations for the baseline:
 
-| Review scope | Operation | Use |
+| Review scope | Typed MCP tool | Use |
 | --- | --- | --- |
-| One selected file | `git.review_packet.file` | Names, dependencies, tests, history, and representation signals for one file |
-| Several selected files | `git.review_packet.files` | The same evidence for a bounded set of files |
-| Whole review scope | `git.review_packet` | Use only when the broader scope is intentional |
-| Explicit historical revision | `git.review_packet.revision` | History-only context when current-tree Python evidence would mislead |
+| One selected file | `git_review_packet_file` | Names, dependencies, tests, history, and representation signals for one file |
+| Several selected files | `git_review_packet_files` | The same evidence for a bounded set of files |
+| Whole review scope | `git_review_packet` | Use only when the broader scope is intentional |
+| Explicit historical revision | `git_review_packet_revision` | History-only context when current-tree Python evidence would mislead |
 
 Every request needs an explicit repository root. Bounded history requests need an explicit positive
 time boundary and limit. Preserve the packet's scope, revision, warnings, truncation, and source
 locations in the review notes.
 
-For the standard MCP research request, use an absolute repository root and repository-relative
-paths. A bounded single-file baseline has this shape:
+Pass an absolute repository root and repository-relative paths to the typed tool. For example,
+`git_review_packet_file` takes:
 
 ```json
 {
   "repository_root": "/absolute/path/to/repository",
-  "operation": "git.review_packet.file",
   "path": "src/module.py",
   "since_unix_time": 1735689600,
-  "limit": 20,
-  "detail": "bounded baseline for representation review"
+  "limit": 20
 }
 ```
 
-Use `git.review_packet.files` with a repository-relative `paths` list for a small named set. Use
-`git.review_packet` only for an explicitly requested broad scope. Do not send absolute file paths,
-omit the positive `since_unix_time` or `limit`, or invent operation-specific fields. If a request is
-rejected, correct the reported shape once; do not retry the same research with overlapping bounds.
+If only the compatibility `research` tool is exposed, select the corresponding dotted operation
+from its schema. For example, use `git.review_packet.file` with the file path in `term`. Use the
+advertised schema for other operations. If a request is rejected, correct the reported shape once.
 
 Consume the result in this order:
 

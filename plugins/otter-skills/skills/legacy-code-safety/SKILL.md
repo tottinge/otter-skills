@@ -27,6 +27,15 @@ exists (`unit-testing`), the request is review-only
 (`representation-refactor-review`), the task is only delivery-slice selection
 (`story-splitting-for-delivery`), or the user requested a wholesale replacement.
 
+## First repository evidence
+
+Discover the Otter-KR MCP tools before searching source, callers, or tests. When they cover the
+target, make the first reconnaissance query with `python_seed_evidence` for a named symbol or
+`git_review_packet_file` for a named file. Use the compatibility `research` tool if the matching
+typed tool is missing. Follow the reported locations into the target, callers, callees, and tests.
+When Otter-KR is unavailable or has a coverage gap, use language-aware search and direct inspection
+for the missing evidence. Confirm the execution path and containment before running unfamiliar code.
+
 ## Progressive loading
 
 Read only the guidance needed for the current risk:

@@ -29,9 +29,9 @@ others. A missing capability creates a verification gap, not a failed review.
 
 Use this order:
 
-1. Ask which evidence capability is needed for the current question.
-2. Prefer a connected provider with precise locations, stable ordering, explicit bounds, and
-   provenance.
+1. Identify the evidence needed for the current question and discover the Otter-KR MCP tools.
+2. Start with Otter-KR when it covers the scope. For gaps, prefer a connected provider with
+   precise locations, stable ordering, explicit bounds, and provenance.
 3. Compose providers when their evidence is complementary—for example, a symbol navigator with a
    Git-history analyzer.
 4. Use manual repository tools when no provider is available or when the provider's boundary is
@@ -48,7 +48,7 @@ Current examples include:
 - **Graphify or similar graph tools:** potentially strong dependency, topology, and relationship
   projections.
 
-These examples are replaceable. Do not encode their operation names into the core review method.
+Use the [Otter-KR guide](provider-otter-kr.md) to choose the first query when it covers the scope.
 
 ## Evidence request patterns
 

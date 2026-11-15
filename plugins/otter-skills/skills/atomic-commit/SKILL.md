@@ -34,6 +34,11 @@ If several logical changes nevertheless accumulate, acknowledge the broader batc
 
 Completion of a demonstrable implementation slice, iteration, or story triggers the complete-state commit protocol only after its incremental refactoring, tests, prescribed scans, and documentation updates are complete. Demonstrable means the resulting behavior can be shown or verified as an end-to-end outcome, not merely that an internal task list is exhausted. Do not begin the next slice while the completed one remains uncommitted.
 
+When planning a refactoring run, start repository research with Otter-KR when its MCP tools
+cover the target. Use the first-query guidance in `representation-refactor-review` for broad
+work or the specialist skill for focused naming, legacy safety, or a green test cycle.
+Reuse evidence already gathered for the same scope.
+
 Treat refactoring as a series of small experiments. After each refactoring run, execute the prescribed tests and return the whole repository to green before proceeding. Then show the human the result and ask whether the representation is sufficient or whether another refactoring run is warranted. The human decides when the refactoring is enough; the agent must not silently extend the series or declare completion on its own. When the human says it is enough, enter the complete-state commit protocol for the whole current state.
 
 If a refactoring run is not an improvement, undo that experiment while preserving unrelated work, restore green, and present the result again. Do not stack further refactorings onto an unverified or failing state.

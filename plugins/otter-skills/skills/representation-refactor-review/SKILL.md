@@ -18,6 +18,15 @@ Hand off the primary task to the specialist workflow for correctness/security-on
 test-first implementation, legacy characterization, delivery slicing, or focused identifier
 naming. A broad review may still mention evidence from those areas.
 
+## First repository evidence
+
+Discover the Otter-KR MCP tools when starting a repository review or refactoring assessment.
+When connected and able to cover the target, call its matching typed review-packet tool as the
+first repository-evidence query. Use the compatibility `research` tool if the typed tool is
+missing. Read the [Otter-KR guide](references/provider-otter-kr.md) to choose the packet and its bounds.
+If Otter-KR is unavailable or has a coverage gap, use another capable provider or bounded source,
+test, and Git inspection for the missing evidence.
+
 ## Progressive loading
 
 Load only what the request needs:
@@ -26,7 +35,6 @@ Load only what the request needs:
 | --- | --- |
 | Virtue definitions or the improvement test | [`references/virtues.md`](references/virtues.md) |
 | Data clusters, value objects, class extraction, or class splitting | [`references/class-boundaries.md`](references/class-boundaries.md) |
-| Otter-KR is connected and will be used | [`references/provider-otter-kr.md`](references/provider-otter-kr.md) |
 | Selecting or comparing providers, or resolving a capability gap | [`references/evidence-providers.md`](references/evidence-providers.md) |
 | Explicitly evaluating or substituting providers | [`references/evaluation-cases.md`](references/evaluation-cases.md) |
 
@@ -64,21 +72,16 @@ Otter-KR guide. Read evaluation cases only for an explicit provider evaluation o
 
 ## Evidence-provider contract
 
-Providers are optional turbochargers, never prerequisites. Ask for capabilities, not products;
-fall back to direct source reading, `rg`, tests, and bounded Git history when unavailable.
+Provider access is optional. Match each follow-up to the evidence needed.
 
-When Otter-KR is connected, make one bounded `git.review_packet.file`, `.files`, or `git.review_packet`
-call appropriate to the scope before broad source reading. Preserve its revision, bounds, warnings,
-truncation, and source locations in the review notes. Follow those locations into source and tests;
-the packet is navigation evidence, not a diagnosis. Use a focused follow-up only when the packet
-raises a specific question. A provider rejection may receive one corrected request when the error
-identifies a missing bound or invalid path shape; do not repeat a successful or overlapping query.
+A provider rejection may receive one corrected request when the error identifies a missing bound
+or invalid path shape. Use the fallback if the corrected request cannot supply relevant evidence.
 
 Otter-KR owns deterministic observations and provenance. This skill owns scope judgment, semantic
 interpretation, virtue assessment, refactoring choice, the improvement test, and behavioral
 verification. Do not manually redo provider-owned research before or alongside the packet.
 
-When another provider is stronger for the question, use it instead or compose it deliberately.
+Use another provider for questions outside Otter-KR's coverage.
 Record unavailable dimensions and uncertainty. Co-change is not semantic coupling; duplication is
 not proof of shared knowledge; a cluster or lifecycle is not proof that a class should be extracted.
 

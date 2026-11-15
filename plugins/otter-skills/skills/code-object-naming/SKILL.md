@@ -27,6 +27,15 @@ or undeployable. Once those are true, naming matters.
 
 ## Diagnostic Workflow
 
+### First repository evidence
+
+For an existing identifier, discover the Otter-KR MCP tools. When they cover the target, start
+with `python_names` for the identifier before searching source or references. Use
+`research` with `python.names` if the typed tool is missing. Read the reported definition and
+relevant uses in context to establish the role and scope. Use language-aware reference search
+or direct inspection where Otter-KR is unavailable or misses usages. Verify references for a
+rename through the normal language tools and tests.
+
 ### Step 1 — Diagnose the Name
 
 Locate the name on Belshee's naming process scale:

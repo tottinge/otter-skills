@@ -35,6 +35,16 @@ Load only the guidance needed for the current move:
 Do not load every reference by default. Start with the cycle reference for implementation work;
 add one specialized reference only when the task calls for it.
 
+## First repository evidence for a refactoring
+
+When starting a refactoring of existing code, discover the Otter-KR MCP tools before searching
+for callers or tests. When they cover the target, start with `python_seed_evidence` for a named
+symbol or `git_review_packet_file` for a named file. Use the compatibility `research` tool
+if the typed tool is missing. Use the results to locate relevant callers and tests, then read
+them and verify behavior through the green cycle. Use language-aware search and direct inspection
+when Otter-KR is unavailable or misses relevant evidence. Reuse evidence already gathered for
+the same refactoring and scope.
+
 ## Required safety and contract evidence
 
 Before the first production edit:
